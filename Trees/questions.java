@@ -111,7 +111,65 @@ class Solution {
 }
 
 
+/*    Clone a Binary Tree (GFG)  */
 
+/*    RECURSIVE APPROACH  */
 
+class Solution{
+    public static Tree cloneTree(Tree tree){
+       // add code here.
+      if(tree == null) return null;
+       Tree node = new Tree(tree.data);
+       node.left = cloneTree(tree.left);
+       node.right = cloneTree(tree.right);
+       node.random = tree.random;
+       return node
+      
+    }     
+  }
 
+/*    ANOTHER APPROACH  */
+
+class Solution{
+    public static Tree cloneTree(Tree tree){
+       // add code here.
+       map(tree);
+       set(tree);
+       Tree newHead = tree.left;
+       extract(tree);
+       
+       return newHead;
+     }
+     
+     private static void map(Tree tree){
+          if(tree == null) return ;
+        Tree node = new Tree(tree.data);
+        Tree rootp1 = tree.left;
+        tree.left = node;
+        node.left = rootp1;
+        map(tree.left.left);
+        map(tree.right);
+     }
+     private static void set(Tree tree){
+         if(tree == null) return ;
+         if(tree.random != null){
+             tree.left.random = tree.random.left;
+         }
+         set(tree.left.left);
+         set(tree.right);
+     }
+     private static Tree extract(Tree tree){
+         if(tree==null) return null;
+        Tree rootp1 = tree.left;
+        rootp1.left=null;
+        tree.left  = tree.left.left;
+        rootp1.left = extract(tree.left);
+        rootp1.right = extract(tree.right);
+        return rootp1;
+     }
+     
+     
+     
+     
+}
 
