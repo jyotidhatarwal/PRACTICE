@@ -12,6 +12,7 @@ class Node{
 
 */
 
+/*CONVERT A BINARY TREE TO A CIRCULAR DOUBLY LL */
 class Solution
 { 
     //Function to convert binary tree into circular doubly linked list.
@@ -38,6 +39,49 @@ class Solution
     return l1;  
     }
 }
+
+/* In-place conversion of Sorted DLL to Balanced BST */
+
+/*  APPROACH T- O(NLOGN)*/
+
+public static ListNode convert(ListNode head){
+    if(head==null || head.next==null) return head;
+    ListNode slow=head, fast=head;
+    while(fast!=null&&fast.next!=null){
+        slow=slow.next;
+        fast=fast.next.next;
+    }
+    if(slow.pre!=null) slow.pre.next=null;
+    if(slow.next!=null) slow.next.pre=null;
+    slow.pre=convert(head);
+    slow.next=convert(slow.next);
+    return slow;
+}
+
+/*  OPTIMIZED APPROACH T-O(N) */
+
+public static ListNode convert(ListNode head){
+    if(head==null || head.next==null) return head;
+    int n=0;
+    ListNode ptr=head;
+    while(ptr!=null){
+        n++;
+        ptr=ptr.next;
+    }
+    return build(head, n);
+}
+
+public ListNode build(ListNode head, int n){
+    if(n<=0) return null;
+    ListNode left=build(head, n/2);
+    ListNode root=head;
+    root.pre=left;
+    head=head.next;
+    root.next=build(head, n-n/2-1);
+    return root;
+}
+
+
 
 
 
