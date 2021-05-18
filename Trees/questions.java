@@ -242,3 +242,36 @@ class GFG
        
    }
 }
+
+
+/*	Serialize and Deserialize a Binary Tree (GFG)	*/
+
+class Tree 
+{
+    //Function to serialize a tree and return a list containing nodes of tree.
+	public void serialize(Node root, ArrayList<Integer> A) 
+	{
+	    //code here
+	    if(root == null){
+	        A.add(-1);
+	        return;
+	    }
+	    A.add(root.data);
+	    serialize(root.left,A);
+	    serialize(root.right,A);
+	}
+	
+	//Function to deserialize a list and construct the tree.
+	int index =0;
+    public Node deSerialize(ArrayList<Integer> A)
+    {
+        //code here
+        if(index == A.size()) return null;
+        int val = A.get(index++);
+        if(val == -1) return null;
+        Node node = new Node(val);
+        node.left = deSerialize(A);
+        node.right = deSerialize(A);
+        return node;
+    }
+}
