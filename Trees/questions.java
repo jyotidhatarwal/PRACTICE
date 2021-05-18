@@ -166,10 +166,79 @@ class Solution{
         rootp1.left = extract(tree.left);
         rootp1.right = extract(tree.right);
         return rootp1;
-     }
-     
-     
-     
-     
+     }  
 }
 
+
+/*      Construct tree from Inorder and LevelOrder  (GFG)        */
+
+class GfG
+{
+    Node buildTree(int inord[], int level[])
+    {
+        //your code here
+          //your code here
+       HashMap<Integer,Integer> map=new HashMap<>();
+	       for(int i=0;i<inord.length;i++)
+	       {
+	    	   map.put(inord[i], i);
+	       }
+	       return buildTreelevel(inord,0,inord.length-1,level,map);
+    }
+    Node buildTreelevel(int[] inorder,int is,int ie,int[] level,HashMap<Integer,Integer> map)
+	 {
+		 if(is>ie||level.length==0)
+		 {
+			 return null;
+		 }
+		 Node root=new Node(level[0]);
+		 int index=map.get(level[0]);
+		 int count=index-is;
+		 int[] llevel=new int[count];
+		 int[] rlevel=new int[level.length-count-1];
+		 int l=0;
+		 int r=0;
+		 for(int i=1;i<level.length;i++)
+		 {
+			 if(map.get(level[i])<index)
+			 {
+				 llevel[l]=level[i];
+				 l++;
+			 }
+			 else
+			 {
+				 rlevel[r]=level[i];
+				 r++;
+			 }
+		 }
+		 root.left= buildTreelevel(inorder, is, index-1, llevel, map);
+		 root.right= buildTreelevel(inorder, index+1, ie, rlevel, map);
+		 return root;
+	 }
+}
+
+
+
+/*     Construct BST from Postorder (GFG)     */
+
+class GFG
+{   int idx =0;
+    public static Node constructTree(int post[],int n)
+    {
+        //Add your code here.
+        return help(post,0,n-1);
+    }
+   private static Node help(int post[],int start,int end){
+     
+     if(start > end) return null;
+     Node node = new Node(post[end]);
+     int i;
+     for(i= end;i>=start;i--){
+         if(post[i] < post[end]) break;
+     }
+     node.right= help(post,i+1,end-1);
+     node.left =help(post,start,i);
+     return node;
+       
+   }
+}
