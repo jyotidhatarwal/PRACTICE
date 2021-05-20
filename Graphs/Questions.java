@@ -180,4 +180,68 @@ class Solution
        	}
 }
     
+	/*STRONGLY CONNECTED COMPONENTS ( KOSARAJU ALGORITHM)  (GFG)	*/
+	
+class Solution
+{
+    //Function to find number of strongly connected components in the graph.
+    public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        //code here
+        // step-1
+        Stack<Integer> st = new Stack<>();
+        boolean[] visited = new boolean[V];
+        for(int i=0;i<V;i++){
+            if(visited[i] == false){
+                dfs(adj,visited,i,st);
+            }
+        }
+        // step-2
+        ArrayList<ArrayList<Integer>> newGraph = transpose(adj,V);
+        
+        //step-3
+        visited = new boolean[V];
+        int count =0;
+        while(st.size() >0){
+            int curr = st.pop();
+                if(visited[curr] == false){
+                    dfs(newGraph,visited,curr);
+                    count++;
+                }
+        }
+        return count;
+    }
+    private void dfs(ArrayList<ArrayList<Integer>> graph,boolean[] visited,int curr,Stack<Integer> st){
+        visited[curr] = true;
+        for(int nbrs: graph.get(curr)){
+            if(visited[nbrs] == false){
+                dfs(graph,visited,nbrs,st);
+            }
+        }
+        st.push(curr);
+    }
+    private void dfs(ArrayList<ArrayList<Integer>> graph,boolean[]visited,int curr){
+        visited[curr] = true;
+        for(int nbrs:graph.get(curr)){
+            if(visited[nbrs] == false){
+                dfs(graph,visited,nbrs);
+            }
+        }
+    }
+    
+    private ArrayList<ArrayList<Integer>> transpose(ArrayList<ArrayList<Integer>> graph,int N){
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        for(int i=0;i<N;i++){
+            result.add(new ArrayList<>());
+        }
+        
+        for(int i=0;i<N;i++){
+            for(int nbrs:graph.get(i)){
+                result.get(nbrs).add(i);
+            }
+        }
+        return result;
+    }
+}
+
 
