@@ -133,4 +133,51 @@ class Solution
         }
        
     }
+    
+ /* MOTHER VERTEX (GFG) */
+    class Solution
+{
+    //Function to find a Mother Vertex in the Graph.
+    int count;
+    public int findMotherVertex(int V, ArrayList<ArrayList<Integer>>adj)
+    {
+        // Code here
+        Stack<Integer> st = new Stack<>();
+        boolean[] visited = new boolean[V];
+		for(int i=0;i<V;i++){
+		    if(visited[i] == false){
+		        dfs(adj,visited,i,st);
+		    }
+		}
+		int ans = st.pop();
+		visited = new boolean[V];
+		count=0;
+		dfs(adj,visited,ans);
+	    if(count != V){
+	        return -1;
+	    }
+	    return ans;
+		
+    }
+    	private void dfs(ArrayList<ArrayList<Integer>> graph,boolean[] visited,int curr,Stack<Integer> st){
+       	    visited[curr] = true;
+       	    for(int nbrs:graph.get(curr)){
+       	        if(visited[nbrs] == false){
+       	            dfs(graph,visited,nbrs,st);
+       	        }
+       	    }
+       	    st.push(curr);
+       	}
+       	
+    private void dfs(ArrayList<ArrayList<Integer>> graph,boolean[]visited,int curr){
+       	    visited[curr] = true;
+       	    count++;
+       	    for(int nbrs:graph.get(curr)){
+                if(visited[nbrs] == false){
+                    dfs(graph,visited,nbrs);
+                }       	        
+       	    }
+       	}
+}
+    
 
