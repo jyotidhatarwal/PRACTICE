@@ -244,4 +244,62 @@ class Solution
     }
 }
 
+	/* CHEF AND REVERSING  ( CODECHEF)	*/
+	
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    	public static class Pair{
+	    int vtx;
+	    int wt;
+	    Pair(int vtx,int wt){
+	        this.vtx = vtx;
+	        this.wt = wt;
+	    }
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    String[] st = br.readLine().split(" ");
+	    int vtces = Integer.parseInt(st[0]);
+	    int edges = Integer.parseInt(st[1]);
+	    ArrayList<ArrayList<Pair>> graph = new ArrayList<>();
+	    for(int i=0;i<vtces;i++){
+	        graph.add(new ArrayList<>());
+	    }
+	    for(int i=0;i<edges;i++){
+	        st = br.readLine().split(" ");
+	        int u = Integer.parseInt(st[0]) -1;
+	        int v= Integer.parseInt(st[1])-1;
+	        graph.get(u).add(new Pair(v,0));
+	        graph.get(v).add(new Pair(u,1));
+	    }
+	    LinkedList<Pair> que = new LinkedList<>();
+	    boolean[] vis = new boolean[vtces];
+	    que.addLast(new Pair(0,0));
+	    
+	    while(que.size() > 0){
+	        Pair rem  = que.removeFirst();
+	        if(rem.vtx == vtces-1){
+	            System.out.println(rem.wt);
+	            return;
+	        }
+	        vis[rem.vtx] = true;
+	        for(Pair nbrs:graph.get(rem.vtx)){
+	            if(vis[nbrs.vtx] == true){
+	           continue;     
+	            }
+	            if(nbrs.wt == 0){
+	              que.addFirst(new Pair(nbrs.vtx,rem.wt+0));  
+	            }else{
+	               que.addLast(new Pair(nbrs.vtx,rem.wt+1)); 
+	            }
+	        }
+	    }
+	    System.out.println("-1");
+		
+	}
+	
+}
 
