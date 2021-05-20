@@ -101,3 +101,36 @@ class Solution
     }
       
 }
+
+
+
+/*       DFS OF A GRAPH (GFG)       */
+
+class Solution
+{
+    //Function to return a list containing the DFS traversal of the graph.
+    public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+       
+        ArrayList<Integer> ans = new ArrayList<>();
+        boolean[] visited = new boolean[V];
+        for(int i=0;i<V;i++){
+            if(visited[i] == false){
+                dfs(adj,visited,i,ans);
+            }
+        }
+        return ans;
+    }
+    private void dfs(ArrayList<ArrayList<Integer>> graph,boolean[]visited,int curr,ArrayList<Integer> ans){
+    
+        visited[curr] = true;
+        ans.add(curr);
+        for(int nbrs:graph.get(curr)){
+            if(visited[nbrs] == false){
+                dfs(graph,visited,nbrs,ans);
+            }
+        }
+       
+    }
+
