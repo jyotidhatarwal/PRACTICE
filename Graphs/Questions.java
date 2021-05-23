@@ -383,7 +383,58 @@ public class Main {
 	
 	/*	BELLMAN FORD ALGORITHM	*/
 	
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
 
+public class Main {
+	public static void main(String[] args) throws NumberFormatException, IOException {
+	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    String[] st = br.readLine().split(" ");
+	    int n = Integer.parseInt(st[0]);
+	    int m = Integer.parseInt(st[1]);
+	    int[][] arr = new int[m][3];
+	    for(int i=0;i<m;i++){
+	        st = br.readLine().split(" ");
+	        arr[i][0] = Integer.parseInt(st[0])-1;
+	        arr[i][1] = Integer.parseInt(st[1])-1;
+	        arr[i][2] = Integer.parseInt(st[2]);
+	    }
+	    int[] path = new int[n];
+	    Arrays.fill(path,Integer.MAX_VALUE);
+	    path[0] = 0;
+	    
+	    
+	    
+	    
+	    for(int i =0 ;i<n-1;i++){
+	        for(int j= 0;j<m;j++){
+	            int u = arr[j][0];
+	            int v = arr[j][1];
+	            int wt = arr[j][2];
+	            
+	            if(path[u] == Integer.MAX_VALUE){
+	                continue;
+	            }
+	            if(path[u] + wt < path[v]){
+	                path[v] = path[u] + wt;
+	            }
+	        }
+	    }
+	    
+	    for(int i=1;i<n;i++){
+	        if(path[i] != Integer.MAX_VALUE){
+	            System.out.print(path[i] +" ");
+	        }else{
+	            System.out.print("1000000000");
+	        }
+	    }
+	    System.out.println();
+        
+			}
+}
 	
 	
 	/*	Negative weight cycle  (GFG)	*/
@@ -547,5 +598,95 @@ class Solution {
 			    }
     }
 }
+	
+	/*	Rotting Oranges (LC-994)	*/
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        if(n== 0 && m == 0) return 0;
+        LinkedList<int[]> que = new LinkedList<>();
+        int fresh_orange =0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j] == 1){
+                    fresh_orange++;
+                }else if(grid[i][j] == 2){  // adding position of rotten orange in que
+                    que.add(new int[]{i,j});
+                }
+            }
+        }
+        if(fresh_orange ==0) return 0;
+        int minute=0;
+        while(que.size() > 0){
+            int size = que.size();
+            while(size-- > 0){
+                int[] rem = que.removeFirst();
+                int x = rem[0];
+                int y = rem[1];
+                if(x-1>=0 && grid[x-1][y] == 1){
+                    grid[x-1][y] = 2;
+                    que.add(new int[]{x-1,y});
+                    fresh_orange--;
+                }
+                if(y-1>=0 && grid[x][y-1] == 1){
+                    grid[x][y-1] = 2;
+                    que.add(new int[]{x,y-1});
+                    fresh_orange--;
+                }
+                if(x+1<grid.length && grid[x+1][y] == 1){
+                    grid[x+1][y] = 2;
+                    que.add(new int[]{x+1,y});
+                    fresh_orange--;
+                }
+                if(y+1<grid[0].length && grid[x][y+1] == 1){
+                    grid[x][y+1] = 2;
+                    que.add(new int[]{x,y+1});
+                    fresh_orange--;
+                }
+            }
+            minute++;
+        }
+        return fresh_orange == 0 ? minute-1 : -1;
+    }
+}
+	
+	/*	Coloring A Border	(LC-1034)	*/
+
+class Solution {
+    public int[][] colorBorder(int[][] grid, int r0, int c0, int color) {
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] visited = new boolean[n][m];
+        if(grid[r0][c0] == color){
+            return grid;
+        }
+        
+        dfs(grid,r0,c0,grid[r0][c0],visited,color,n,m);
+        return grid;
+    }
+    private void dfs(int[][]grid,int row,int col,int val,boolean[][]visited,int color,int n,int m){
+        if(row > n-1 || row <0 ||  col > m-1 || col <0 || grid[row][col] != val || visited[row][col]){
+            return;
+        }
+        visited[row][col] = true;
+        boolean border = false;
+        if(row==0 || col== 0 ||row == n-1 || col == m-1 || grid[row+1][col] != val || grid[row-1][col] != val || grid[row][col +1 ] != val || grid[row][col-1] != val ){
+            border = true;
+        }
+        
+        dfs(grid,row+1,col,val,visited,color,n,m);  // top
+        dfs(grid,row-1,col,val,visited,color,n,m);  // bottom
+        dfs(grid,row,col+1,val,visited,color,n,m);  // right
+        dfs(grid,row,col-1,val,visited,color,n,m);  // left
+        
+        if(border){
+            grid[row][col] = color;
+        }
+    }
+}
+	
+	
 	
 	
