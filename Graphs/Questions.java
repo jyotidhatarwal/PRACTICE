@@ -421,4 +421,84 @@ class Solution
     }
 }
 	
+	/*	TOPOLOGICAL SORTING (GFG) USING DFS	*/
+	
+class Solution
+{
+    //Function to return list containing vertices in Topological order. 
+    static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
+    {
+        // add your code here
+        Stack<Integer> st = new Stack<>();
+        boolean[] visited = new boolean[V];
+        Arrays.fill(visited,false);
+        for(int i=0;i<V;i++){
+            if(visited[i] == false){
+                dfs(adj,i,visited,st);
+            }
+        }
+        int[]ans = new int[V];
+        int i= 0;
+        while(st.size() > 0){
+            ans[i] = st.peek();
+            i++;
+            st.pop();
+        }
+        return ans;
+    }
+static void dfs(ArrayList<ArrayList<Integer>> graph,int curr,boolean[]visited,Stack<Integer> st){
+        visited[curr] = true;
+        for(int nbr : graph.get(curr)){
+            if(visited[nbr] == false){
+                dfs(graph,nbr,visited,st);
+            }
+        }
+        st.push(curr);
+    }
+}
+	
+
+	/* KAHN'S ALGORITHM  ( GFG) 	(ITERATIVE TOPOLOGICAL SORT)	*/
+	
+class Solution
+{
+    //Function to return list containing vertices in Topological order. 
+    static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
+    {
+        // add your code here
+        int[]indegree = new int[V];
+        int[] ans = new int[V];
+        
+        for(int i=0;i<V;i++){
+            for(int nbrs: adj.get(i)){
+                indegree[nbrs]++;
+            }
+        }
+        LinkedList<Integer> que = new LinkedList<>();
+             for(int i=0;i<V;i++){
+                if(indegree[i] == 0){
+                    que.addLast(i);
+                }
+             }
+        int count=0;
+        while(que.size() > 0){
+            int rem = que.removeFirst();
+            ans[count] = rem;
+            count++;
+            for(int nbrs:adj.get(rem)){
+                indegree[nbrs]--;
+                if(indegree[nbrs] == 0){
+                    que.addLast(nbrs);
+                }
+            }
+        }
+        if(count == V){
+            return ans;
+        }else{
+            return new int[]{-1};
+        }
+    }
+}
+
+	
 	
