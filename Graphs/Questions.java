@@ -676,8 +676,8 @@ class Solution {
             border = true;
         }
         
-        dfs(grid,row+1,col,val,visited,color,n,m);  // top
-        dfs(grid,row-1,col,val,visited,color,n,m);  // bottom
+        dfs(grid,row+1,col,val,visited,color,n,m);  // bottom
+        dfs(grid,row-1,col,val,visited,color,n,m);  // top
         dfs(grid,row,col+1,val,visited,color,n,m);  // right
         dfs(grid,row,col-1,val,visited,color,n,m);  // left
         
