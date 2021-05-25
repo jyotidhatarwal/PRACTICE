@@ -809,7 +809,82 @@ class Solution
     }
 }
 	
+
+		/*	Number of Islands (LC-200)	*/
+
+class Solution {
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int ans =0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == '1' && visited[i][j] == false){
+              dfs(grid,visited,i,j,m,n);
+                ans++;
+             }
+                }
+            }
+         return ans;
+        }
+       
+    
+    private void dfs(char[][]grid,boolean[][] visited,int i,int j,int m,int n){
+        
+        if(i < 0 || i >= m || j <0 || j>= n || grid[i][j] == '0' || visited[i][j] == true){
+            return ;
+        }
+        visited[i][j] = true;
+        
+        dfs(grid,visited,i+1,j,m,n);
+        dfs(grid,visited,i-1,j,m,n);
+        dfs(grid,visited,i,j+1,m,n);
+        dfs(grid,visited,i,j-1,m,n);
+        
+        
+    }
+}
 	
+	/*	Number of Enclaves	(LC-1020)	*/
+
+class Solution {
+    public int numEnclaves(int[][] grid) {
+        // using dfs
+        int ans =0;
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        // travel on boundary and change 1 to 0
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i == 0 || j== 0 || i== m-1 || j == n-1){
+                    change1to0(grid,i,j,m,n);
+                }
+            }
+        }
+        
+        // calculate the 1's which are not connected to boundary
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == 1){
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    private void change1to0(int[][]grid,int i,int j,int m,int n){
+        if(i <0 || j <0 || i>= m || j >=n || grid[i][j] == 0){
+            return;
+        }
+        grid[i][j] = 0;
+        change1to0(grid,i+1,j,m,n);
+        change1to0(grid,i-1,j,m,n);
+        change1to0(grid,i,j+1,m,n);
+        change1to0(grid,i,j-1,m,n);
+    }
+}
 	
 	
 	
