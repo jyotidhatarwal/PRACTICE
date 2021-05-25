@@ -687,6 +687,129 @@ class Solution {
     }
 }
 	
+	/*	Detect cycle in an undirected graph	(GFG)	USING BFS	*/
+	
+class Pair{
+    int curr;
+    int par;
+    Pair(int curr,int par){
+        this.curr = curr;
+        this.par = par;
+    }
+}
+
+
+class Solution
+{   // by using BFS
+    //Function to detect cycle in an undirected graph.
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        boolean[] visited = new boolean[V];
+        Arrays.fill(visited,false);
+        for(int i=0;i<V;i++){
+            if(visited[i] == false){
+               if(checkCycle(adj,visited,i)){
+                return true;
+            }
+            }
+        }
+        return false;
+    }
+    
+    private boolean checkCycle(ArrayList<ArrayList<Integer>> graph,boolean[]visited,int S){
+        
+        LinkedList<Pair> que = new LinkedList<>();
+        que.add(new Pair(S,-1));
+        visited[S] = true;
+        while(que.size() > 0){
+            int current = que.peek().curr;
+            int parent = que.peek().par;
+            que.remove();
+            
+            for(int nbrs : graph.get(current)){
+                if(visited[nbrs] == false){
+                    que.add(new Pair(nbrs,current));
+                    visited[nbrs] = true;
+                }else if(parent != nbrs) return true;
+            }
+        }
+        return false;
+    }
+}
+	
+
+	/*	Detect cycle in an undirected graph	(GFG)	USING DFS	*/
+
+class Solution
+{   // using DFS
+    //Function to detect cycle in an undirected graph.
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        boolean[] visited = new boolean[V];
+        Arrays.fill(visited,false);
+        for(int i=0;i<V;i++){
+            if(visited[i] == false){
+                if(checkCycle(i,-1,visited,adj)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean checkCycle(int curr, int parent,boolean[]visited,ArrayList<ArrayList<Integer>> adj){
+        visited[curr] = true;
+        for(int nbrs : adj.get(curr)){
+            if(visited[nbrs] == false){
+                if(checkCycle(nbrs,curr,visited,adj) == true){
+                    return true;
+                }
+            }else if(parent != nbrs) return true;
+        }
+        return false;
+    }
+}
+	
+
+	/*	Detect cycle in a directed graph  (GFG)	USING DFS	*/
+
+class Solution 
+{   // using dfs
+    //Function to detect cycle in a directed graph.
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // code here
+        boolean[] visited = new boolean[V];
+        boolean[] dfsVisited = new boolean[V];
+        for(int i=0;i<V;i++){
+            if(visited[i] == false){
+                if(checkCycle(i,visited,dfsVisited,adj) == true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean checkCycle(int curr,boolean[]visited,boolean[]dfsVisited,ArrayList<ArrayList<Integer>> adj){
+        visited[curr] = true;
+        dfsVisited[curr] = true;
+        
+        for(int nbrs: adj.get(curr)){
+            if(visited[nbrs] == false){
+                if(checkCycle(nbrs,visited,dfsVisited,adj) == true){
+                    return true;
+                }
+            }else if(dfsVisited[nbrs] == true){
+                return true;
+            }
+        }
+        dfsVisited[curr] = false;
+        return false;
+    }
+}
+	
+	
 	
 	
 	
