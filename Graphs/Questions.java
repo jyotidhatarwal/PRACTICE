@@ -846,6 +846,45 @@ class Solution {
     }
 }
 	
+	/*number of islands  (GFG)	*/
+	
+class Solution
+{
+    //Function to find the number of islands.
+    public int numIslands(char[][] grid)
+    {
+        // Code here
+        int m = grid.length;
+        int n = grid[0].length;
+        int ans =0;
+        boolean[][] visited = new boolean[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == '1' && visited[i][j] == false){
+                    dfs(grid,visited,i,j,m,n);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    private void dfs(char[][]grid,boolean[][]visited,int i,int j,int m, int n){
+        if(i < 0 || j < 0 || i >= m || j >= n || grid[i][j] == '0' || visited[i][j] == true){
+            return;
+        }
+        visited[i][j] = true;
+        dfs(grid,visited,i+1,j,m,n);
+        dfs(grid,visited,i-1,j,m,n);
+        dfs(grid,visited,i,j+1,m,n);
+        dfs(grid,visited,i,j-1,m,n);
+        dfs(grid,visited,i-1,j-1,m,n);
+         dfs(grid,visited,i-1,j+1,m,n);
+          dfs(grid,visited,i+1,j-1,m,n);
+           dfs(grid,visited,i+1,j+1,m,n);
+    }
+}
+	
+	
 	/*	Number of Enclaves	(LC-1020)	*/
 
 class Solution {
