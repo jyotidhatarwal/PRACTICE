@@ -984,6 +984,134 @@ class Solution {
         return perimeter;
     }
 }
+
+		/*	Surrounded Regions	(LC-130)	*/
+	
+class Solution {
+    public void solve(char[][] board) {
+        int m = board.length;
+        int n = board[0].length;
+        
+        // apply dfs and change O to $ on the boundary --> step -1
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 || j == 0 || i == m-1 || j == n-1){
+                    dfs(board,i,j);
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j] == '$'){
+                    board[i][j] = 'O';
+                }else{
+                    board[i][j] = 'X';
+                }
+            }
+        }
+        
+    }
+    private void dfs(char[][] board,int i,int j){
+      if(i<0 || j<0 || i>board.length-1 || j>board[0].length-1 || board[i][j]!='O'){
+            return;
+        }
+        board[i][j] = '$';
+        dfs(board,i+1,j);
+        dfs(board,i-1,j);
+        dfs(board,i,j+1);
+        dfs(board,i,j-1);
+    }
+}
+	
+	/*	Number of Distinct Islands (LINTCODE - 860)	*/
+	
+public class Solution {
+    /**
+     * @param grid: a list of lists of integers
+     * @return: return an integer, denote the number of distinct islands
+     */
+       HashSet<String> set = new HashSet<>();
+    int[][] dir = {{0,1},{1,0},{0,-1},{-1,0}};
+    char[] move = {'r','d','l','u'};
+    String shape = "";
+    int n=0,m=0;
+    public int numberofDistinctIslands(int[][] grid) {
+        // write your code here
+         if(grid.length ==0 || grid[0].length == 0) return 0;
+       n = grid.length;
+        m = grid[0].length;
+        for(int i=0;i<n;i++){
+            for(int j =0;j<m;j++){
+                if(grid[i][j]==1){
+                    dfs(i,j,grid);
+                    set.add(shape);
+                    shape = "";
+                }
+            }
+        }
+        
+        return set.size();
+    }
+  
+    
+    public void dfs(int i,int j,int[][] grid){
+        
+        grid[i][j] = 0;
+        for(int d = 0;d<4;d++){
+            int r = i + dir[d][0];
+            int c = j + dir[d][1];
+            
+            if(r>=0 && c>=0 && r< n && c<m && grid[r][c] == 1){
+                shape += move[d];
+                dfs(r,c,grid);
+                shape += "b";
+            }
+        }
+         
+    }
+}
+	
+	/*	Bus Routes	(LC - 815)	*/
+	
+class Solution {
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+       HashSet<Integer> visited = new HashSet<>();
+       Queue<Integer> q = new LinkedList<>();
+       HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
+       int ans = 0; 
+        
+       if (S==T) return 0; 
+        
+       for(int i = 0; i < routes.length; i++){
+            for(int j = 0; j < routes[i].length; j++){
+                ArrayList<Integer> buses = map.getOrDefault(routes[i][j], new ArrayList<>());
+                buses.add(i);
+                map.put(routes[i][j], buses);                
+            }       
+        }
+                
+       q.add(S); 
+       while (q.size() > 0) {
+           int size = q.size();
+           ans++;
+           while(size-- > 0) {
+               int cur = q.remove();
+               ArrayList<Integer> buses = map.get(cur);
+               for (int bus: buses) {
+                    if (visited.contains(bus)) continue;
+                    visited.add(bus);
+                    for (int j = 0; j < routes[bus].length; j++) {
+                        if (routes[bus][j] == T) return ans;
+                        q.add(routes[bus][j]);  
+                   }
+               }
+           }
+        }
+        return -1;
+    }
+}
+	
 	
 	
 	
