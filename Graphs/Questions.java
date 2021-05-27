@@ -925,5 +925,66 @@ class Solution {
     }
 }
 	
+	/*	Max Area of Island (LC - 695)	*/
+
+class Solution {
+    // same as number of islands but this time we have to calculate the size of island too. and return the island with maximum size
+    // t-O(m*n)
+    public int maxAreaOfIsland(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        if(m == 0 || n ==0) return 0;
+        int[] count = new int[1];
+        int max =0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == 1){
+                    count[0] = 0;
+                    dfs(grid,i,j,m,n,count);
+                    max = Math.max(count[0],max);
+                }
+            }
+        }
+        return max;
+    }
+    private void dfs(int[][] grid,int x,int y,int m,int n,int[] count){
+        if(x < 0 || y < 0 || x >= m || y >= n || grid[x][y] == 0){
+            return;
+        }
+        grid[x][y] = 0; 
+        count[0]++;
+        dfs(grid,x+1,y,m,n,count);
+        dfs(grid,x-1,y,m,n,count);
+        dfs(grid,x,y+1,m,n,count);
+        dfs(grid,x,y-1,m,n,count);
+    }
+}
+	
+	/*	Island Perimeter 	(LC- 463)	*/
+	
+class Solution {
+    public int islandPerimeter(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int perimeter =0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == 1){
+                    // top
+                    if(i == 0 || grid[i-1][j] == 0) perimeter++;
+                    // left
+                    if(j == 0 || grid[i][j-1] == 0) perimeter++;
+                    // bottom
+                    if(i == m-1 || grid[i+1][j] == 0) perimeter++;
+                    // right
+                    if(j == n-1 || grid[i][j+1] == 0) perimeter++;
+                }
+            }
+        }
+        return perimeter;
+    }
+}
+	
+	
 	
 	
