@@ -1176,6 +1176,81 @@ class Solution {
     }
 }
 	
+	/*	Shortest Path in Binary Matrix (LC-1091)	*/
+	
+class Solution {
+    int[][] dirs = {{-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1}};
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        if(n == 0 || m == 0) return -1;
+        
+        if(grid[0][0] == 1 || grid[n-1][m-1] == 1) return -1;
+        
+        LinkedList<int[]> que = new LinkedList<>();
+        int ans =0;
+        que.add(new int[]{0,0});
+        
+        while(que.size() > 0){
+            int size = que.size();
+            while(size-- > 0){
+                int[] rem = que.remove();
+                int i = rem[0];
+                int j = rem[1];
+                if(i == n-1 && j == m-1) return ans+1;
+                for(int[] dir : dirs){
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    if(x >= 0 && y >= 0 && x < grid.length && y < grid[0].length && grid[x][y] == 0){
+                        que.add(new int[]{x,y});
+                        grid[x][y] = 1;
+                    }
+                }
+            }
+          
+            ans++;
+        }
+        return -1;
+    }
+}
+	
+	/*	 01 Matrix	(LC-542)	*/
+	
+class Solution {
+    int[][] dirs = {{1,0},{0,1},{-1,0},{0,-1}};
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        LinkedList<int[]> que = new LinkedList<>();
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(mat[i][j] == 0){
+                    que.add(new int[]{i,j});
+                }else {
+                    mat[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+        
+        while(que.size() > 0){
+            int size = que.size();
+           
+                int[] curr = que.remove();
+                
+                for(int[] dir : dirs){
+                    int x = curr[0] + dir[0];
+                    int y = curr[1] + dir[1];
+                    if(x < 0 || x >= mat.length || y < 0|| y >= mat[0].length || mat[x][y] <= mat[curr[0]][curr[1]] +1) continue;
+                    que.add(new int[]{x,y});
+                    mat[x][y] = mat[curr[0]][curr[1]] +1;
+                }
+            
+        }
+        return mat;
+    }
+}
+	
 	
 	
 	
