@@ -1251,6 +1251,149 @@ class Solution {
     }
 }
 	
+	/*	Euler circuit and Path(UNDIRECTED GRAPH)	(GFG)	*/
+	
+class Solution
+{
+    public int isEularCircuitExist(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        int[] degree = new int[V];
+        for(int i=0;i<V;i++){
+            if(adj.get(i).size() % 2 ==1){
+                degree[i]++;
+            }
+        }
+        int odd = 0;
+        for(int i : degree){
+            if(i % 2 != 0){
+                odd++;
+            }
+        }
+        if(odd == 0){
+            return 2;   // circuit
+        }else if(odd == 2){
+              return 1;   // path
+        }
+        
+        return 0;   // neither of one
+    }
+}
+	
+	/*	Eulerian Path in an Undirected Graph 	(GFG)	*/
+	
+class Solution{
+    static int eulerPath(int N, int graph[][]){
+        // code here
+        int[] degree=new int[N];
+		for(int i=0;i<N;i++)
+		{
+			for(int j=0;j<N;j++)
+			{
+				if(graph[i][j]==1)
+				{
+					degree[i]++;
+				}
+			}
+		}
+		int odd=0;
+		for(int i:degree)
+		{
+			if(i%2!=0)
+			{
+				odd++;
+			}
+		}
+		if(odd==0||odd == 2)
+		{
+			return 1;
+		}
+		else
+		{
+		return 0;
+		}
+    }
+}
+	
+	/*	Euler Circuit in an Undirected Graph	(GFG)	*/
+	
+class Solution
+{
+    public boolean isEularCircuitExist(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        int[] degree = new int[V];
+        for(int i=0;i<V;i++){
+                if(adj.get(i).size()% 2 == 1){
+                    degree[i]++;
+                }
+        }
+        int odd =0;
+        for(int i : degree){
+            if(i % 2 != 0){
+                 odd++;
+            }
+            if(odd != 0){
+                return false;
+            }
+        }
+        return true;
+        
+        
+    }
+}
+	
+	/*	Walls and Gates	(LINTCODE-663)	*/
+	
+public class Solution {
+    /**
+     * @param rooms: m x n 2D grid
+     * @return: nothing
+     */
+    public void wallsAndGates(int[][] rooms) {
+        // write your code here
+        if(rooms.length == 0 || rooms[0].length == 0) return;
+    int n = rooms.length;
+    int m = rooms[0].length;
+    boolean[][] visited = new boolean[n][m];
+  
+     LinkedList<int[]> que = new LinkedList<>();
+    for(int i = 0;i<n;i++){
+        for(int j = 0; j<m;j++){
+            if(rooms[i][j] == 0){
+               que.add(new int[]{i,j});
+               visited[i][j] = true;
+            }
+        }
+    }
+    
+    int level = 0;
+    int[][] dir = {{0,1},{0,-1},{1,0},{-1,0}};
+
+    while(que.size()!=0){
+        int size = que.size();
+        while(size-->0){
+             int[] idx = que.removeFirst();
+            int r = idx[0];
+            int c = idx[1];
+            
+            for(int d = 0;d< 4;d++){
+                
+                int x = r + dir[d][0];
+                int y = c + dir[d][1];
+                
+                if(x>=0 && y>=0 && x< n && y<m && rooms[x][y] == 2147483647 && visited[x][y] == false ){
+                    rooms[x][y] = level + 1; 
+                   que.add(new int[]{x,y});
+                   visited[x][y] = true;
+                }
+            }
+        }
+        level++;
+    }   
+    }
+}
+	
 	
 	
 	
