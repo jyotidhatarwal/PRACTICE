@@ -1394,6 +1394,91 @@ public class Solution {
     }
 }
 	
+
+		/*	Similar String Groups	(L.C- 839)	*/
+	
+class Solution {
+    int[] parent;
+    private int find(int x){
+        if(parent[x] == x){
+            return x;
+        }
+        int temp = find(parent[x]);
+         parent[x] = temp;
+        return temp;
+    }
+    private boolean isSimilar(String s1,String s2){
+        int count =0;
+        for(int i=0;i<s1.length();i++){
+            if(s1.charAt(i) != s2.charAt(i)){
+                count++;
+                if(count > 2){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public int numSimilarGroups(String[] strs) {
+        int n = strs.length;
+        
+        parent = new int[n];
+        // initialyy everyone is parent of itself
+        for(int i=0;i<n;i++){
+            parent[i] = i;
+        }
+        int count =n;
+        for(int i=0;i<n;i++){
+            int lox = find(i);
+            for(int j= i+1;j<n;j++){
+                if(isSimilar(strs[i],strs[j])){
+                    int loy = find(j);
+                    if(lox != loy){
+                        parent[loy] = lox;
+                        count--;
+                }
+            }
+        }
+        }
+        return count;
+    }
+}
+	
+	/*	Redundant Connection	(L.C-684)	*/
+	
+class Solution {
+    // using union find
+    int[] parent;
+   private int find(int i){
+       if (parent[i] == i)
+          return i;
+       int temp = find(parent[i]);
+       parent[i] = temp;
+       return temp;
+    }
+    public int[] findRedundantConnection(int[][] edges) {
+         int n = edges.length;
+         parent = new int[n+1];
+        // initially everyone is parent of itself only
+         for (int i = 0; i <= n; i++){
+             parent[i] = i;
+         }
+
+            for (int[] ans : edges){
+            int lox = find(ans[0]);
+            int loy = find(ans[1]);
+
+                if (lox != loy){
+                    parent[loy] = lox;
+                 }else{
+                    return ans;
+             }
+            }
+
+        return new int[0];
+    }
+}
+	
 	
 	
 	
