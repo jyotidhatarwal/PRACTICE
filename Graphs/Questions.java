@@ -1537,6 +1537,37 @@ class Solution {
 
 }
 	
+		/*	Possible Path 	(GFG)	*/
+	
+class Solution
+{
+    public int isPossible(int[][] paths)
+    {
+        // Code here
+        // eulerian circuit
+        
+        int n = paths.length;
+        int m = paths[0].length;
+        int[] degree = new int[n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(paths[i][j] == 1){
+                    degree[i]++;
+                }
+            }
+        }
+        int odd =0;
+        for(int i : degree){
+            if(i % 2 != 0){
+                odd++;
+            }
+        }
+        if(odd == 0){
+            return 1;
+        }
+        return 0;
+    }
+}
 	
 	
 	
