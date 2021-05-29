@@ -1569,6 +1569,136 @@ class Solution
     }
 }
 	
+	/*	Network Delay Time	(L.C- 743)	*/
+	
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        // step-1 --> make a graph from times array
+        HashMap<Integer,HashMap<Integer,Integer>> graph = new HashMap<>();
+        for(int[] time : times){
+            graph.putIfAbsent(time[0],new HashMap<>());
+            graph.get(time[0]).put(time[1],time[2]);
+        }
+        
+        // step-2 --> using Dijstra Algorithm
+        
+        // in this at 0 index we have distance and 1 index we have vertex
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) ->{
+            return a[0] - b[0];
+        });
+        
+        pq.add(new int[]{0,k});
+        // since the distance from a given vertex to that vertex is zero
+        
+        boolean[]visited = new boolean[n+1];
+        // because index are starting from 1
+        
+        int time =0;
+        // time taken from a vertex K to travel all nodes
+        
+        while(pq.size() > 0){
+            int size = pq.size();
+            while(size-- > 0){
+                int[] rem = pq.remove();
+                int distance = rem[0];
+                int vertex = rem[1];
+                if(visited[vertex] == true) continue;
+                visited[vertex] = true;
+                time = distance;
+                n--;
+                if(n == 0) return time;
+                if(graph.containsKey(vertex)){
+                  for(int nbrs : graph.get(vertex).keySet()){
+                      pq.add(new int[]{distance+graph.get(vertex).get(nbrs) , nbrs});
+                  }  
+                }
+            }
+        }
+        return -1;
+    }
+}
+	
+	/*	Cheapest Flights Within K Stops	(LC-787)	*/
+	
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        
+        // step-1 --> make a hashmap from flights array
+        HashMap<Integer,HashMap<Integer,Integer>> graph = new HashMap<>();
+        for(int[] flight : flights){
+            graph.putIfAbsent(flight[0],new HashMap<>());
+            graph.get(flight[0]).put(flight[1],flight[2]);
+        }
+      
+        // step-2 --> using Dijkstra Algorithm
+        
+        // 0  position --> weight or cost
+        // 1 position --> vertex
+        // 2 position --> number of stops i.e K
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> {
+           return  a[0] - b[0];
+        });
+        
+        boolean[] visited = new boolean[n];
+        
+        pq.add(new int[]{0,src,k+1});
+        visited[src] = true;
+        
+        
+        while(pq.size() > 0){
+            int size = pq.size();
+            
+                int[] rem = pq.remove();
+                int cost = rem[0];
+                int vertex = rem[1];
+                int stops = rem[2];
+                if(vertex == dst) return cost;
+               
+                if(stops > 0){
+                    if(graph.containsKey(vertex)){
+                        for(int nbrs : graph.get(vertex).keySet()){
+                            visited[nbrs] = true;
+                            pq.add(new int[]{cost + graph.get(vertex).get(nbrs),nbrs,stops-1});
+                        }
+                    }
+                
+             }
+            
+        }
+        return -1;
+    }
+}
+	
+	/*	Satisfiability of Equality Equations	(LC-990)	*/
+	
+class Solution {
+    int[] parent = new int[26];
+    
+    private int find(int i){
+        if(parent[i] == i){
+            return i;
+        }
+        int temp = find(parent[i]);
+        parent[i] = temp;
+        return temp;
+    }
+    public boolean equationsPossible(String[] equations) {
+        for(int i=0;i<26;i++){
+            parent[i] = i;
+        }
+        for(String s : equations){
+            if(s.charAt(1) == '='){
+                parent[find(s.charAt(0) -'a')] = find(s.charAt(3) - 'a');
+            }
+        }
+        for(String s : equations){
+            if(s.charAt(1) == '!' && find(s.charAt(0) - 'a') == find(s.charAt(3) - 'a')){
+                return false;
+            }
+        }
+        return true;
+    }
+}
 	
 	
 	
