@@ -1773,6 +1773,122 @@ class Solution {
     }
 }
 	
+	/*	Find the Maximum Flow	(GFG)		--> EDMOND'S KARP ALGORITHM		*/
+	
+	
+class Solution 
+{ 
+    static int solve(int n, int m, ArrayList<ArrayList<Integer>> e) { 
+    	int g[][] = new int[n][n];
+    	for(ArrayList<Integer> edge : e) {
+    		int x = edge.get(0)-1, y = edge.get(1)-1, z = edge.get(2);
+    		g[x][y] += z;
+    		g[y][x] += z;
+    	}
+    	int inf = Integer.MAX_VALUE;
+    	int start = 0, end = n-1;
+    	int flow = 0;
+    	while(true) {
+    		int par[] = new int[n];
+    		for(int i=0; i<n; i++) {
+    			par[i] = i;
+    		}
+    		Queue<Integer> q = new LinkedList<>();
+    		q.add(start);
+    		par[start] = -1;
+    		while(!q.isEmpty()) {
+    			int x = q.remove();
+    			if(x==end) break;
+    			for(int y=0; y<n; y++) {
+    				if(g[x][y]>0 && par[y]==y) {
+    					q.add(y);
+    					par[y] = x;
+    				}
+    			}
+    		}
+			if(par[end]==end) break;
+    		int min = inf;
+			for(int i=end; i!=-1 && par[i]!=-1; i=par[i]) {
+				min = Math.min(min, g[par[i]][i]);
+			}
+			flow += min;
+			for(int i=end; i!=-1 && par[i]!=-1; i=par[i]) {
+				g[par[i]][i] -= min;
+				g[i][par[i]] += min;
+			}
+    	}
+    	return flow;
+    }
+}
+	
+	
+	/*		Job Sequencing Problem		(GFG)		*/
+	
+	
+class Solution{
+// return an array of size 2 having the 0th element equal to the count
+    // and 1st element equal to the maximum profit
+    int[] JobScheduling(Job arr[], int n){
+        Arrays.sort(arr,(a,b)-> b.profit -a.profit );
+        int max = 0;
+        int count = 0;
+        HashSet<Integer> set = new HashSet<>();
+        for( int i =0; i< n ; i++){
+            Job j = arr[i];
+            
+            for( int s = j.deadline ;s >=1; s--){
+                if( !set.contains(s) ) {
+                    set.add(s);
+                    count++;
+                    max += j.profit;
+                    break;
+                }
+            }
+        }
+        
+        return new int[]{count, max};
+}
+}
+	
+	/*		Minimum Swaps to Sort 	(GFG)		*/
+	
+class Solution
+{
+    //Function to find the minimum number of swaps required to sort the array.
+    public int minSwaps(int nums[])
+    {
+        // Code here
+        int n= nums.length;
+        int ans =0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(nums[i],i);
+        }
+        Arrays.sort(nums);
+        boolean[] visited = new boolean[n];
+        Arrays.fill(visited,false);
+        
+        for(int i=0;i<n;i++){
+            int j=i;
+            int cycle =0;
+            if(visited[i] == true || map.get(nums[i]) == i){
+                continue;
+            }
+            while(visited[j] == false){
+                visited[j] = true;
+                j = map.get(nums[j]);
+                cycle++;
+            }
+            if(cycle >0){
+                ans += (cycle-1);
+            }
+        }
+        return ans;
+    }
+}
+	
+	
+	
 	
 	
 	
