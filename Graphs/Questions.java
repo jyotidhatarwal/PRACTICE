@@ -1669,6 +1669,47 @@ class Solution {
     }
 }
 	
+	
+	
+	
+	/*				###########################	ANOTHER APPROACH		################			*/
+	
+	
+	
+	
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+//         Bellman Ford
+        
+        int[] path = new int[n];
+        Arrays.fill(path, Integer.MAX_VALUE);
+        path[src] = 0;
+        
+        for(int i = 0; i<=k; i++){
+            int temp[] = path.clone(); // temp array is used so that at kth iteration only node at k
+									   // stops away can fill
+            for(int j = 0; j<flights.length; j++){
+                int u = flights[j][0];
+                int v = flights[j][1];
+                int wt = flights[j][2];
+                
+                if(path[u] != Integer.MAX_VALUE){
+                    temp[v] = Math.min(temp[v], path[u] + wt);
+                }
+            }
+            path = temp;
+        }
+        
+        return path[dst] == Integer.MAX_VALUE ? -1 : path[dst];
+        
+    }
+}
+	
+	
+	
+	
+	
+	
 	/*	Satisfiability of Equality Equations	(LC-990)	*/
 	
 class Solution {
@@ -1965,6 +2006,157 @@ class Solution {
        return -1;
     }
 }
+	
+	/*		Graph Connectivity With Threshold	(LC-1627)	*/
+	
+	
+class Solution {
+    int[] parent;
+    int[] rank;
+    private int find(int i){
+        if(parent[i] == i){
+            return i;
+        }
+        int temp = find(parent[i]);
+        parent[i] = temp;
+        return temp;
+    }
+    private void  union(int x,int y){
+        int lox = find(x);
+        int loy = find(y);
+        if(lox == loy) return;
+        if(rank[lox] < rank[loy]){
+            parent[lox] = loy;
+        }else if(rank[loy] < rank[lox]){
+            parent[loy] = lox;
+        }else{
+            parent[loy] = lox;
+            rank[lox]++;
+        }
+    }
+    public List<Boolean> areConnected(int n, int threshold, int[][] queries) {
+        List<Boolean> ans = new ArrayList<>();
+         parent = new int[n+1];
+        rank = new int[n+1];
+
+        for(int i=0;i<=n;i++){
+            parent[i] = i;
+            rank[i] = 0;
+        }
+        for(int i= threshold+1;i<=n;i++){
+            for(int j=i;j<=n;j+=i){
+               union(i,j);
+            }
+        }
+        for(int q =0; q<queries.length;q++){
+            if(find(queries[q][0]) == find(queries[q][1])){
+                ans.add(true);
+            }else{
+                ans.add(false);
+            }
+        }
+        return ans;
+    }
+    
+}
+	
+	
+	/*		Smallest String With Swaps	(LC-1202)	*/
+	
+
+class Solution {
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        char[] array = s.toCharArray();
+        boolean[] visited = new boolean[s.length()];
+        List<Integer>[] graph = new List[s.length()];
+        for(int i = 0 ; i < array.length ; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for(List<Integer> pair : pairs) {
+            graph[pair.get(0)].add(pair.get(1));
+            graph[pair.get(1)].add(pair.get(0));
+        }
+        for(int i = 0 ; i < array.length ; i++) {
+            if(!visited[i]) {
+                List<Integer> indexes = new ArrayList<>();
+                List<Character> contents = new ArrayList<>();
+                DFS(graph, array, indexes, contents, i, visited);
+                Collections.sort(indexes);
+                Collections.sort(contents);
+                for(int j = 0 ; j < indexes.size() ; j++) {
+                    array[indexes.get(j)] = contents.get(j);
+                }
+            }
+        }
+        return new String(array);
+    }
+    private void DFS(List<Integer>[] graph, char[] array, List<Integer> indexes, List<Character> contents, int start, boolean[] visited) {
+        visited[start] = true;
+        indexes.add(start);
+        contents.add(array[start]);
+        for(int child : graph[start]) {
+            if(!visited[child]) {
+                DFS(graph, array, indexes, contents, child, visited);
+            }
+        }
+    }
+}
+	
+	
+	
+	/*		Min Cost to Connect All Points	(LC-1584)		*/
+	
+	
+	
+class Solution {
+    public int minCostConnectPoints(int[][] points) {
+//      Prims Algorithm
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[1] - b[1]);
+        int n = points.length;
+        boolean visited[] = new boolean[n];
+        int costTillPoint = 0;
+        int count = 0;
+        
+        pq.add(new int[]{0, 0});  // [0] -> index of point, 
+                                  // [1] -> cost of connecting the point
+        
+        while(pq.size() > 0){
+            int[] rem = pq.remove();
+            
+            int idx = rem[0];
+            int cost = rem[1];
+            
+            if(visited[idx] == true){
+                continue;
+            }
+            
+            visited[idx] = true;
+            costTillPoint += cost;
+            count++;
+            
+            if(count == n) return costTillPoint;
+            
+            for(int i = 0; i<n; i++){
+                if(visited[i] == false){
+                    int x1 = points[idx][0];
+                    int y1 = points[idx][1];
+                    int x2 = points[i][0];
+                    int y2 = points[i][1];
+                    
+                    int costBtwPoints = Math.abs(x1-x2) + Math.abs(y1-y2);
+                    
+                    pq.add(new int[]{i, costBtwPoints});
+                }
+            }
+        }
+        
+        return costTillPoint;
+            
+    }
+}
+
+	
 	
 	
 	
