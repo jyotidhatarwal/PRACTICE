@@ -10,6 +10,96 @@ class Node{
     }
 }
 
+
+/*		Vertical Order Traversal of a Binary Tree	(LC-987)	*/
+
+
+class Solution {
+    public class vPair{
+        TreeNode node = null;
+        int hl =0;
+        vPair(TreeNode node,int hl){
+            this.node = node;
+            this.hl =hl;
+        }
+    }
+    public void width(TreeNode node,int hl,int[] ans){
+        if(node == null) return;
+        ans[0] = Math.min(ans[0],hl);
+        ans[1] = Math.max(ans[1],hl);
+        
+        width(node.left,hl-1,ans);
+        width(node.right,hl+1,ans);
+    }
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        int[]minMax = new int[2];
+        width(root,0,minMax);
+        int len = minMax[1] - minMax[0] +1;
+         List<List<Integer>> ans = new ArrayList<>();
+        for(int i=0;i<len;i++){
+            ans.add(new ArrayList<>());
+        }
+       
+        PriorityQueue<vPair> parentQue = new PriorityQueue<>((a,b) -> {
+            return a.node.val - b.node.val;
+        });
+        PriorityQueue<vPair> childQue = new PriorityQueue<>((a,b) -> {
+            return a.node.val - b.node.val;
+        });
+        
+        parentQue.add(new vPair(root,Math.abs(minMax[0])));
+        while(parentQue.size() > 0){
+            int size = parentQue.size();
+            while(size-- > 0){
+                vPair rem = parentQue.remove();
+                TreeNode node = rem.node;
+                int hl = rem.hl;
+                ans.get(hl).add(node.val);
+                if(node.left != null){
+                    childQue.add(new vPair(node.left,hl-1));
+                }
+                if(node.right != null){
+                    childQue.add(new vPair(node.right,hl+1));
+                }
+            }
+            PriorityQueue<vPair> temp = parentQue;
+            parentQue = childQue;
+            childQue = temp;
+        }
+        
+        return ans;
+    }
+}
+
+
+/*	Diagonal Order Of A Binarytree	(GFG)	*/
+
+
+ public static ArrayList<ArrayList<Integer>> diagonalOrder(TreeNode root) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.addFirst(root);
+        while(que.size() > 0){
+            int size = que.size();
+             ArrayList<Integer> ans = new ArrayList<>();
+            while(size-- > 0){
+                TreeNode rem = que.removeFirst();
+                while(rem != null){
+                    ans.add(rem.val);
+                    if(rem.left != null){
+                        que.addLast(rem.left);
+                    }
+                    rem = rem.right;
+                }
+            }
+            result.add(ans);
+        }
+        return result;
+    }
+
+
+
+
 */
 
 /*CONVERT A BINARY TREE TO A CIRCULAR DOUBLY LL */
@@ -276,6 +366,46 @@ class Tree
     }
 }
 
+
+/*	Serialize and Deserialize Binary Tree	(LC-297)		*/
+
+
+
+public class Codec {
+    private void helpSerialize(TreeNode root,StringBuilder sb){
+        if(root == null){
+            sb.append("null,");
+            return;
+        }
+        sb.append(root.val+",");
+        helpSerialize(root.left,sb);
+        helpSerialize(root.right,sb);
+    }
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        helpSerialize(root,sb);
+        return sb.toString();
+    }
+    int idx=0;
+    private TreeNode Helpdeserialize(String[] arr) {
+        if(idx >= arr.length || arr[idx].equals("null")){
+            idx++;
+            return null;
+        }
+        
+        TreeNode node = new TreeNode(Integer.parseInt(arr[idx++]));
+        node.left =  Helpdeserialize(arr);
+        node.right =  Helpdeserialize(arr);
+        return node;
+    }
+    
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] arr = data.split(",");
+        return  Helpdeserialize(arr);
+    }
+}
 
 
 
