@@ -11,6 +11,125 @@ class Node{
 }
 
 
+
+	/*		Left View of Binary Tree	(GFG)		*/
+
+class Tree
+{
+    //Function to return list containing elements of left view of binary tree.
+    ArrayList<Integer> leftView(Node root)
+    {
+      // Your code here
+      if(root == null) return new ArrayList<>();
+      ArrayList<Integer> ans = new ArrayList<>();
+      LinkedList<Node> que = new LinkedList<>();
+      que.add(root);
+      while(que.size() > 0){
+          int size = que.size();
+          ans.add(que.getFirst().data);
+          while(size-- > 0){
+              Node rem = que.removeFirst();
+              if(rem.left != null){
+                  que.add(rem.left);
+              }
+              if(rem.right != null){
+                  que.add(rem.right);
+              }
+          }
+      }
+      return ans;
+    }
+}
+
+
+
+/*		Binary Tree Right Side View	(LC-199)		*/
+
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        if(root == null) return new ArrayList<>();
+     List<Integer> ans = new ArrayList<>();
+        LinkedList<TreeNode>que = new LinkedList<>();
+        que.add(root);
+        while(que.size() > 0){
+            int size = que.size();
+            ans.add(que.getFirst().val);
+            while(size-- > 0){
+                TreeNode rem = que.removeFirst();
+                if(rem.right != null){
+                    que.add(rem.right);
+                }
+                if(rem.left != null){
+                    que.add(rem.left);
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+
+			/*	Top View of Binary Tree (GFG)		*/
+
+
+class Solution
+{   public static class Pair{
+        Node node = null;
+        int hl =0;
+        Pair(Node node,int hl){
+            this.node = node;
+            this.hl = hl;
+        }
+        
+    }
+    //Function to return a list of nodes visible from the top view 
+    //from left to right in Binary Tree.
+    static void width(Node root,int hl,int[]minMax){
+        if(root == null) return;
+        minMax[0] = Math.min(minMax[0],hl);
+        minMax[1] = Math.max(minMax[1],hl);
+        width(root.left,hl-1,minMax);
+        width(root.right,hl+1,minMax);
+    }
+    static ArrayList<Integer> topView(Node root)
+    {
+        // add your code
+        int[] minMax = new int[2];
+        width(root,0,minMax);
+        int length = minMax[1] - minMax[0] +1;
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(int i=0;i<length;i++){
+            ans.add(null);
+        }
+        LinkedList<Pair> que = new LinkedList<>();
+        que.add(new Pair(root,Math.abs(minMax[0])));
+        while(que.size() > 0){
+            int size = que.size();
+            while(size--  > 0){
+                Pair rem = que.removeFirst();
+                Node node = rem.node;
+                int hl = rem.hl;
+                if(ans.get(hl) == null){
+                    ans.set(hl,node.data);
+                }
+                if(node.left != null){
+                    que.add(new Pair(node.left,hl-1));
+                }
+                if(node.right != null){
+                    que.add(new Pair(node.right,hl+1));
+                }
+            }
+        }
+        return ans;
+        
+    }
+}
+
+
+
+
+
+
 /*		Vertical Order Traversal of a Binary Tree	(LC-987)	*/
 
 
