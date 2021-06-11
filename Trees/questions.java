@@ -126,7 +126,55 @@ class Solution
 }
 
 
+/*		Bottom View of Binary Tree	(GFG)	*/
 
+class Tree
+{   public static class Pair{
+    Node node = null;
+    int hl =0;
+    Pair(Node node,int hl){
+        this.node = node;
+        this.hl = hl;
+    }
+}
+    public void width(Node root,int hl,int[]minMax){
+        if(root == null) return;
+        minMax[0]  = Math.min(minMax[0],hl);
+        minMax[1] = Math.max(minMax[1],hl);
+        width(root.left,hl-1,minMax);
+        width(root.right,hl+1,minMax);
+    }
+    //Function to return a list containing the bottom view of the given tree.
+    public ArrayList <Integer> bottomView(Node root)
+    {
+        // Code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        int[] minMax = new int[2];
+        width(root,0,minMax);
+        int length = minMax[1] - minMax[0] +1;
+        for(int i=0;i<length;i++){
+            ans.add(null);
+        }
+        LinkedList<Pair> que = new LinkedList<>();
+        que.add(new Pair(root,Math.abs(minMax[0])));
+        while(que.size() > 0){
+            int size = que.size();
+            while(size-- > 0){
+                Pair rem = que.removeFirst();
+                Node node = rem.node;
+                int hl = rem.hl;
+                ans.set(hl,node.data);
+                if(node.left != null){
+                    que.add(new Pair(node.left,hl-1));
+                }
+                if(node.right != null){
+                    que.add(new Pair(node.right,hl+1));
+                }
+            }
+        }
+        return ans;
+    }
+}
 
 
 
