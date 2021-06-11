@@ -294,6 +294,60 @@ class Solution {
     }
 
 
+
+
+/*		Boundary Traversal of binary tree(GFG)		*/
+
+
+class Solution
+{   ArrayList<Integer> ans;
+	ArrayList <Integer> printBoundary(Node node)
+	{
+	    ans= new ArrayList<>();
+	    if(node == null) return new ArrayList<>();
+	    ans.add(node.data);
+	    if(node.left != null){
+	        leftB(node.left);
+	    }
+	    leaves(node);
+	    if(node.right != null){
+	        rightB(node.right);
+	    }
+	    return ans;
+	}
+	void leftB(Node node){
+	    if(node.left == null && node.right == null) return;
+	    ans.add(node.data);
+	    if(node.left != null){
+	        leftB(node.left);
+	    }else if(node.right != null){
+	        leftB(node.right);
+	    }
+	    
+	}
+	void leaves(Node node){
+	    if(node == null) return;
+	    if(node.left == null && node.right == null) {
+	        ans.add(node.data);
+	    }
+	    leaves(node.left);
+	    leaves(node.right);
+	}
+	void rightB(Node node){
+	    if(node.left == null && node.right == null) return;
+	    if(node.right != null){
+	        rightB(node.right);
+	    }else if(node.left != null){
+	        rightB(node.left);
+	    }
+	    ans.add(node.data);
+	}
+}
+
+
+
+
+
 /*		Binary Tree Coloring Game	(LC-1145)	*/
 
 
