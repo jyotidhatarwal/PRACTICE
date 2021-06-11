@@ -176,6 +176,35 @@ class Tree
     }
 }
 
+/*		Reverse Level Order Traversal(GFG)		*/
+
+
+class Tree
+{
+    public ArrayList<Integer> reverseLevelOrder(Node node) 
+    {
+        // code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        LinkedList<Node> que = new LinkedList<>();
+        que.add(node);
+        while(que.size() > 0){
+            int size = que.size();
+            while(size-- > 0){
+                Node rem = que.removeFirst();
+                ans.add(rem.data);
+                if(rem.right != null){
+                    que.add(rem.right);
+                }
+                if(rem.left != null){
+                    que.add(rem.left);
+                }
+            }
+        }
+        Collections.reverse(ans);
+        return ans;
+    }
+}      
+
 
 
 /*		Vertical Order Traversal of a Binary Tree	(LC-987)	*/
