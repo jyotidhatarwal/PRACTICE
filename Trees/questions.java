@@ -721,3 +721,90 @@ class Solution{
 }
 
 
+
+/*		Count Complete Tree Nodes(LC-222)	*/
+
+
+class Solution {
+    public int countNodes(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        int leftHeight = leftCount(root);
+        int rightHeight = rightCount(root);
+        if(leftHeight == rightHeight){
+            return (1 << leftHeight) -1;
+        }
+        return countNodes(root.left) + countNodes(root.right) +1;
+    }
+    private int leftCount(TreeNode root){
+        int count=1;
+        while(root.left != null){
+            count++;
+            root = root.left;
+        }
+        return count;
+    }
+    private int rightCount(TreeNode root){
+        int count =1;
+        while(root.right != null){
+            count++;
+            root = root.right;
+        }
+        return count;
+    }
+}
+
+/*		 Closest Binary Search Tree Value	(LINTCODE)		*/
+
+
+public class Solution {
+    /**
+     * @param root: the given BST
+     * @param target: the given target
+     * @return: the value in the BST that is closest to the target
+     */
+    public int closestValue(TreeNode root, double target) {
+        // write your code here
+        int ans = root.val;
+        while(root != null){
+            if(Math.abs(root.val - target) < Math.abs(ans - target)){
+                ans = root.val;
+            }
+            if(target < root.val){
+                root = root.left;
+            }else{
+                root = root.right;
+            }
+        }
+        return ans;
+    }
+}
+
+
+/*		Sum Root to Leaf Numbers	(LC-129)	*/
+
+
+class Solution {
+    public int sumNumbers(TreeNode root) {
+       return traversal(root,0);
+    }
+    private int traversal(TreeNode root,int val){
+        if(root == null){
+            return 0;
+        }
+        if(root.left == null && root.right == null){
+            return val*10 + root.val;
+        }
+        int left = traversal(root.left,val*10+root.val);
+        int right = traversal(root.right,val*10+root.val);
+        return left + right;
+    }
+}
+
+
+
+
+
+
+
