@@ -204,3 +204,149 @@ class Solution {
         return ans;
     }
 }
+
+
+
+/*          Sub-Array sum divisible by K        (GFG)*/
+
+
+class Solution
+{
+    long subCount(long arr[] ,int n,int k)
+    {
+        long[] rem = new long[k];
+        Arrays.fill(rem,0);
+        int sum = 0;
+        for(int i=0;i<n;i++){
+            sum += arr[i];
+            rem[((sum % k) + k) % k]++;
+        }
+        int ans =0;
+        for(int i=0;i<k;i++){
+            if(rem[i] > 1){
+                ans += (rem[i] * (rem[i] -1 )) /2;
+            }
+        }
+        ans += rem[0];
+        return ans;
+        
+    }
+}
+
+
+/*          Minimum Number of Refueling Stops         (LC-871)    */
+
+
+class Solution {
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        if(target == startFuel){
+            return 0;
+        }
+        // max priority Queue
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        int ans =0;
+        int currentMaxCoordinate = startFuel;
+        int idx = 0;
+        while(true){
+            while( idx < stations.length && stations[idx][0] <= currentMaxCoordinate){
+                pq.add(stations[idx][1]);
+                idx++;
+            }
+            if(currentMaxCoordinate >= target) return ans;
+            if(pq.size() == 0) return -1;
+            currentMaxCoordinate += pq.remove();
+            ans++;
+        }
+     
+    }
+}
+
+
+/*        Potions (Hard Version)    (CODEFORCES )                                            */
+
+
+
+import java.util.*;
+import java.io.*;
+public class Main{
+    public static void main(String[] args) throws Exception{
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        long [] arr  = new long [n];
+        for(int i=0;i<n;i++){
+            arr[i] = scn.nextLong();
+        }
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+        long positive =0;
+        long negative =0;
+        long count =0;
+        for(int i=0;i<n;i++){
+            if(arr[i] >= 0){
+                positive += arr[i];
+                count++;
+            }else{
+                if(positive >= (negative +Math.abs(arr[i]))){
+                    negative += Math.abs(arr[i]);
+                     pq.add(arr[i]);
+                }else{
+                    if(pq.size() == 0){
+                        continue;
+                    }
+                    long temp = Math.abs(pq.peek());
+                    if(Math.abs(arr[i]) < temp){
+                        pq.remove();
+                        pq.add(arr[i]);
+                        negative = negative - temp + Math.abs(arr[i]);
+                    }
+                }
+               
+            }
+        }
+        System.out.println(count + pq.size());
+    }
+}
+
+
+
+/*                X of a Kind in a Deck of Cards      (LC-914)          */
+
+
+class Solution {
+    public boolean hasGroupsSizeX(int[] deck) {
+        Map<Integer, Integer> count = new HashMap<>();
+        int res = 0;
+        for (int i : deck) count.put(i, count.getOrDefault(i, 0) + 1);
+        for (int i : count.values()) res = gcd(i, res);
+        if(res >=2) return true;
+        return false;
+    }
+
+    public int gcd(int a, int b) {
+        return b > 0 ? gcd(b, a % b) : a;
+    
+    }
+}
+
+
+
+/*          Check Arithmetic Progression  (GFG)       */
+
+
+class Solution
+{
+    boolean checkIsAP(int arr[] ,int n)
+    {
+        // code here
+        Arrays.sort(arr);
+        int d1;
+        int d2;
+        for(int i=0;i<n-2;i++){
+            d1 = arr[i+1] - arr[i];
+            d2 = arr[i+2] - arr[i+1];
+            if(d1 != d2) return false;
+        }
+return true;
+    
+    }
+}
+
