@@ -262,6 +262,37 @@ class Solution {
 }
 
 
+/*		SAME DIFFERENCES		(CODEFORCES)		*/
+
+
+import java.util.*;
+import java.io.*;
+public class Main{
+    public static void main(String[] args) throws Exception{
+        Scanner scn = new Scanner(System.in);
+        int t = scn.nextInt();
+       
+        while(t-- > 0){
+            int n = scn.nextInt();
+            int[] arr = new int[n];
+            for(int i=0;i<n;i++){
+                arr[i] = scn.nextInt();
+            }
+            HashMap<Integer,Integer> map = new HashMap<>();
+             long count =0;
+            for(int i=0;i<n;i++){
+              if(map.containsKey(arr[i]-i)){
+                    count += map.get(arr[i]-i);
+            }
+             map.put(arr[i]-i,map.getOrDefault(arr[i]-i,0)+1);
+            }
+             System.out.println(count);
+        }
+       
+    }
+}
+
+
 /*        Potions (Hard Version)    (CODEFORCES )                                            */
 
 
