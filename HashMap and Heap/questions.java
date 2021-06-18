@@ -757,6 +757,42 @@ private static int LengthOfLargestSubarrayWithContiguousElements(int[] arr){
 	}
 
 
+/*		Check if frequencies can be equal 	(GFG)		*/
+
+
+class Solution {
+    boolean sameFreq(String s) {
+        // code here
+        HashMap<Character,Integer> map = new HashMap<>();
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            map.put(ch,map.getOrDefault(ch,0)+1);
+        }
+         int max=Collections.max(map.values());
+         int min= Collections.min(map.values());
+         int maxc=0;
+         int minc=0;
+        for(int val:map.values()){
+            
+           if(val==max){
+               maxc++;
+           }
+           if(val==min){
+               minc++;
+           }
+        }
+        
+       if(max==min){
+           return true;
+       }else if(maxc==map.size()-1 && minc==1 && min==1){
+           return true;
+       }else if(maxc==1 && minc==map.size()-1 && max-min==1){
+           return true;
+       }else return false;
+        
+    }
+}
+
 
 
 
