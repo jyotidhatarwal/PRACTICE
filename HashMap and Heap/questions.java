@@ -491,5 +491,243 @@ class Solution {
 }
 
 
+/*          Trapping Rain Water     (LC-42)           */
+
+
+// T-O(N)         S-O(N)
+
+
+class Solution {
+    public int trap(int[] height) {
+        int n = height.length;
+        if(n == 0){
+            return 0;
+        }
+        int leftMax[] = new int[n];
+        int rightMax[] = new int[n];
+        leftMax[0] = height[0];
+        for(int i=1;i<n;i++){
+            leftMax[i] = Math.max(leftMax[i-1],height[i]);
+        }
+        rightMax[n-1] = height[n-1];
+        for(int i= n-2;i>=0;i--){
+            rightMax[i] = Math.max(height[i],rightMax[i+1]);
+        }
+        int ans =0;
+        for(int i=1;i<n-1;i++){
+            ans += Math.min(leftMax[i],rightMax[i]) - height[i];
+        }
+        return ans;
+    }
+}
+
+
+//    T-O(N)      S-O(1)
+
+
+class Solution {
+    public int trap(int[] height) {
+        int n = height.length;
+        if(n == 0){
+            return 0;
+        }
+        int leftMax = 0;
+        int rightMax = 0;
+        
+        int i=0;
+        int j = n-1;
+        int ans =0;
+        while(i < j){
+            leftMax = Math.max(leftMax,height[i]);
+            rightMax = Math.max(rightMax,height[j]);
+            
+            if(leftMax <= rightMax){
+                ans += leftMax - height[i];
+                i++;
+            }else{
+                ans += rightMax - height[j];
+                j--;
+            }
+        }
+        return ans;
+    }
+    
+}
+
+
+
+/*          Trapping Rain Water II  (LC-407)          */
+
+
+class Solution {
+    
+    int[][] dirs = {{1,0},{0,1},{-1,0},{0,-1}};
+    
+    class Pair implements Comparable<Pair>{
+        int row;
+        int col;
+        int height;
+        Pair(int row,int col,int height){
+            this.row = row;
+            this.col = col;
+            this.height = height;
+        }
+        public int compareTo(Pair other){
+            return this.height - other.height;
+        }
+    }
+    public int trapRainWater(int[][] heightMap) {
+        int m = heightMap.length;
+        int n = heightMap[0].length;
+        if(m == 0 || n == 0){
+            return 0;
+        }
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        boolean[][] visited = new boolean[m][n];
+        
+        for(int i=0;i<m;i++){
+            visited[i][0] = true;
+            visited[i][n-1] = true;
+            pq.add(new Pair(i,0,heightMap[i][0]));
+            pq.add(new Pair(i,n-1,heightMap[i][n-1]));
+        }
+        for(int i=0;i<n;i++){
+            visited[0][i] = true;
+            visited[m-1][i] = true;
+            pq.add(new Pair(0,i,heightMap[0][i]));
+            pq.add(new Pair(m-1,i,heightMap[m-1][i]));
+        }
+        
+        int ans =0;
+        
+        while(pq.size() > 0){
+            Pair rem = pq.remove();
+            int row = rem.row;
+            int col = rem.col;
+            int height = rem.height;
+            
+            for(int[] dir : dirs){
+                int r = row + dir[0];
+                int c = col + dir[1];
+                
+                if(r > 0 && r < m-1 && c > 0 && c < n-1 && visited[r][c] == false){
+                    visited[r][c] = true;
+                    ans += Math.max(0,height-heightMap[r][c]);
+                    pq.add(new Pair(r,c,Math.max(height,heightMap[r][c])));
+                }
+            }
+        }
+            
+            
+        return ans;
+    }
+}
+
+
+/*          Pairs which are Divisible by K            (GFG)       */
+
+
+class Solution{
+    
+    public static int count4Divisibiles(int arr[], int n ) 
+    { 
+        // Complete the function
+        int ans =0;
+        int k=4;
+        int[] remainder = new int[n];
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            remainder[i] = arr[i] % k;
+           
+            if(remainder[i] < 0){
+                remainder[i] += k;
+            }
+            if(remainder[i] == 0){
+                if(map.containsKey(0)){
+                    ans += map.get(0);
+                }
+            }else{
+                if(map.containsKey(k-remainder[i])){
+                    ans += map.get(k-remainder[i]);
+                }
+            }
+            map.put(remainder[i],map.getOrDefault(remainder[i],0)+1);
+        }
+        return ans;
+    }
+    
+}
+
+
+
+/*          Length of the largest subarray with contiguous elements     (DISTINCT ELEMENTS ONLY)            (GFG)       */
+
+
+
+private  static int LengthOfLargestSubarrayWithContiguousElements(int[] arr){
+	    // Only distinct elements are allowed
+	    int max;
+	    int min;
+	    int overallMax = 1;
+	    int n = arr.length;
+	    for(int i=0;i<n-1;i++){
+	       max = arr[i];
+	       min = arr[i];
+	        for(int j=i+1;j<n;j++){
+	            
+	            if(arr[j] > max){
+	                max = arr[j];
+	            }
+	            if(arr[j] < min){
+	                min = arr[j];
+	            }
+	            if((j-i+1) == (max-min +1)){
+	                overallMax = Math.max((j-i+1),overallMax);
+	            }
+	            
+	        }
+	    }
+	    return  overallMax;
+	}
+
+
+/*          Length of the largest subarray with contiguous elements     (DUPLICATES ELEMENTS ARE ALLOWED)   (GFG)       */
+
+
+private static int LengthOfLargestSubarrayWithContiguousElements(int[] arr){
+	    // duplicates elements are also allowed
+	    int n = arr.length;
+	    int max;
+	    int min;
+	    HashSet<Integer> visited = new HashSet<>();
+	    int overallMax = 1;
+	    for(int i=0;i<n-1;i++){
+	        max = arr[i];
+	        min = arr[i];
+	        visited.add(arr[i]);
+	        for(int j= i+1;j<n;j++){
+	            if(arr[j] < min){
+	                min = arr[j];
+	            }
+	            if(arr[j] > max){
+	                max = arr[j];
+	            }
+	            if(visited.contains(arr[j]) == true){
+	                break;
+	            }else{
+	                visited.add(arr[j]);
+	                if((j-i+1) == (max-min +1)){
+	                    overallMax = Math.max(overallMax,j-i+1);
+	                }
+	            }
+	        }
+	    }
+	    return overallMax;
+	}
+
+
+
+
+
 
 
