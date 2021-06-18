@@ -350,3 +350,146 @@ return true;
     }
 }
 
+
+/*           Rabbits in Forest      (LC-781)          */
+
+
+class Solution {
+    public int numRabbits(int[] answers) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int val : answers){
+            map.put(val,map.getOrDefault(val,0)+1);
+        }
+        int numberOfRabbitsInForest =0;
+        for(int key : map.keySet()){
+            int groupSize = key +1;
+            int rabbitsReported = map.get(key);
+            int numberOfGroups = (int) Math.ceil((rabbitsReported*1.0)/groupSize*1.0);
+            numberOfRabbitsInForest += numberOfGroups * groupSize;
+        }
+        return numberOfRabbitsInForest;
+    }
+}
+
+
+
+/*                Array of Doubled Pairs  (LC-954)          */
+
+
+class Solution {
+    public boolean canReorderDoubled(int[] arr) {
+        if(arr.length == 0) return true;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int val : arr){
+            map.put(val,map.getOrDefault(val,0)+1);
+        }
+        Integer[] A = new Integer[arr.length];
+        for(int i=0;i<arr.length;i++){
+            A[i] = arr[i];
+        }
+        Arrays.sort(A,(a,b) ->{
+           return Math.abs(a) - Math.abs(b); 
+        });
+        for(int val : A){
+            if(map.get(val) == 0){
+                continue;
+            }
+            if(map.getOrDefault(2*val,0) <= 0){
+                return false;
+            }
+            map.put(val,map.get(val)-1);
+            map.put(2*val,map.get(2*val)-1);
+        }
+        return true;
+    }
+}
+
+
+/*          Longest Consecutive Sequence        (LC-128)          */
+
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int max =0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int n : nums){
+            if(map.containsKey(n) == false){
+                int startPoint = n;
+                int endPoint = n;
+            
+            if(map.containsKey(n-1) == true){
+                startPoint = n - map.get(n-1);
+            }
+            if (map.containsKey(n+1) == true){
+                endPoint = n + map.get(n+1);
+            }
+            int newLength = endPoint - startPoint +1;
+            map.put(startPoint,newLength);
+            map.put(endPoint,newLength);
+            if(startPoint != n && endPoint != n){
+                map.put(n,1);
+            }
+            max = Math.max(max,newLength);
+        }
+        }
+        return max;
+    }
+}
+
+
+/*          Bulb Switcher     (LC-319)          */
+
+
+class Solution {
+    public int bulbSwitch(int n) {
+        int bulb =0;
+        if(n == 0){
+            return 0;
+        }
+        int i=1;
+        while(i*i <= n){
+            bulb++;
+            i++;
+        }
+        return bulb;
+    }
+}
+
+
+/*                Isomorphic Strings            (LC-205)          */
+
+
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        if(s.length() != t.length()){
+            return false;
+        }
+        // this is used to map character of s to t
+        HashMap<Character,Character> map1 = new HashMap<>();
+        
+        // this is used to mark character of t i.e are they used or not
+        HashMap<Character,Boolean> map2 = new HashMap<>();
+        
+        for(int i=0;i<s.length();i++){
+            char c1 = s.charAt(i);
+            char c2 = t.charAt(i);
+            if(map1.containsKey(c1) == true){
+                if(map1.get(c1) != c2){
+                    return false;
+                }
+            }else{
+                if(map2.containsKey(c2) == true){
+                    return false;
+                }else{
+                    map1.put(c1,c2);
+                    map2.put(c2,true);
+                }
+            }
+        }
+        return true;
+    }
+}
+
+
+
+
