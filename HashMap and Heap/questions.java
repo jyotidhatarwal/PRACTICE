@@ -794,6 +794,60 @@ class Solution {
 }
 
 
+/*		Tricky Sorting Cost	######	OR	LONGEST COMMON SUBSEQUENCE		*/
+
+
+
+class Solution{
+    static int sortingCost(int N, int arr[]){
+        // code here
+        int ans = longestCommonSubsequence(N,arr);
+        int res = N -ans;
+        return res;
+        
+    }
+    static int longestCommonSubsequence(int N,int arr[]){
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int n: arr){
+            if(map.containsKey(n) == false){
+                if(map.containsKey(n-1) == true){
+                    map.put(n,map.get(n-1)+1);
+                }else{
+                    map.put(n,1);
+                }
+            }
+        }
+        int max  = Collections.max(map.values());
+        return max;
+    }
+}
+
+
+
+/*		Brick Wall	(LC-554)		*/
+
+
+
+class Solution {
+    public int leastBricks(List<List<Integer>> wall) {
+        int n = wall.size();
+       int count =0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(List<Integer> row : wall){
+            int prefixSum =0;
+            for(int j=0;j<row.size()-1;j++){
+                prefixSum += row.get(j);
+                map.put(prefixSum,map.getOrDefault(prefixSum,0)+1);
+               count = Math.max(count,map.get(prefixSum));
+            }
+        }
+        int ans = n- count;
+        return ans;
+    }
+}
+
+
+
 
 
 
