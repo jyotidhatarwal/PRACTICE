@@ -848,6 +848,228 @@ class Solution {
 
 
 
+/*		The Skyline Problem(LC-218)	*/
+
+
+class Solution {
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        int n = buildings.length;
+        int[][] x = new int [n][2];
+        int[][] y = new int [n][2];
+        for(int i=0;i<n;i++){
+            x[i][0] = buildings[i][0];
+            x[i][1] = buildings[i][2];
+            y[i][0] = buildings[i][1];
+            y[i][1] = -buildings[i][2];
+        }
+        int[][] ans = new int[2*n][2];
+        for(int i=0;i<n;i++){
+            ans[i][0] = x[i][0];
+            ans[i][1] = x[i][1];
+        }
+        for(int i= n ;i < (2*n); i++){
+            ans[i][0] = y[i%n][0];
+            ans[i][1] = y[i%n][1];
+        }
+        Arrays.sort(ans,(a,b)->{
+            // handeling edge case
+           if(a[0] == b[0]){
+               return b[1] - a[1];
+           }else{
+               return a[0] - b[0];
+           }
+        });
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        pq.add(0);
+        
+        int prev = 0;
+        List<List<Integer>> result = new ArrayList<>();
+        
+        for(int i=0;i<ans.length;i++){
+             List<Integer> point = new ArrayList<>();
+
+            if(ans[i][1] > 0){
+                pq.add(ans[i][1]);
+                if(pq.peek() != prev){
+                    prev = pq.peek();
+                    point.add(ans[i][0]);
+                    point.add(prev);
+                    result.add(point);
+                }
+            }else if(ans[i][1] < 0){
+                pq.remove(Math.abs(ans[i][1]));
+                if(pq.peek() != prev){
+                    prev = pq.peek();
+                     point.add(ans[i][0]);
+                    point.add(prev);
+                    result.add(point);
+                }
+            }
+             
+        }
+        return result;
+    }
+}
+
+
+
+
+
+/*		Anagram Palindrome	(GFG)		*/
+
+
+class Sol
+{
+    int isPossible (String S)
+    {
+        // your code here
+       
+        HashMap<Character,Integer> map = new HashMap<>();
+        for(int i=0;i<S.length();i++){
+            map.put(S.charAt(i),map.getOrDefault(S.charAt(i),0)+1);
+        }
+        int odd = 0;
+        for(int val : map.values()){
+            if(val % 2 != 0){
+                odd++;
+            }
+        }
+        if(odd > 1){
+            return 0;
+        }
+        return 1;
+    }
+}
+
+
+/*		Minimum Window Substring	(LC-76)		*/
+
+
+
+class Solution {
+    public String minWindow(String s, String t) {
+        
+        HashMap<Character,Integer> mapForT = new HashMap<>();
+        for(int i=0;i<t.length();i++){
+            mapForT.put(t.charAt(i),mapForT.getOrDefault(t.charAt(i),0)+1);
+        }
+        
+        HashMap<Character,Integer> mapForS = new HashMap<>();
+        
+        int matchCount =0;
+        int i=0;
+        int j=0;
+
+        String ans = "";
+        while(true){
+        boolean flag1 = false;
+        boolean flag2 = false;
+            // acquire
+            while(j<s.length() && matchCount < t.length()){
+                char ch  = s.charAt(j);
+                mapForS.put(ch,mapForS.getOrDefault(ch,0)+1);
+                if(mapForS.getOrDefault(ch,0) <= mapForT.getOrDefault(ch,0)){
+                    matchCount++;
+                }
+                j++;
+                flag1 = true;
+            }
+            // store answer string and release
+            while(i < j && matchCount == t.length()){
+                String potentialAnswer = s.substring(i,j);
+                if(ans.length() == 0 || potentialAnswer.length() < ans.length()){
+                    ans = potentialAnswer;
+                }
+                char ch = s.charAt(i);
+                if(mapForS.get(ch) == 0){
+                    mapForS.remove(ch);
+                }else{
+                    mapForS.put(ch,mapForS.get(ch)-1);
+                }
+                if(mapForS.getOrDefault(ch,0) < mapForT.getOrDefault(ch,0)){
+                    matchCount--;
+                }
+                i++;
+                flag2 = true;
+            }
+            if(flag1 == false && flag2 == false){
+                break;
+            }
+        }
+        return ans;
+    }
+}
+
+
+/*		Group Anagrams	(LC-49)		*/
+
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<HashMap<Character,Integer>,List<String>> ans = new HashMap<>();
+        for(String s : strs){
+            HashMap<Character,Integer> map = new HashMap<>();
+            for(int i=0;i<s.length();i++){
+                char ch = s.charAt(i);
+                map.put(ch,map.getOrDefault(ch,0)+1);
+            }
+            if(ans.containsKey(map) == false){
+                List<String> list = new ArrayList<>();
+                list.add(s);
+                ans.put(map,list);
+            }else{
+                List<String> list = ans.get(map);
+                list.add(s);
+            }
+        }
+        List<List<String>> result = new ArrayList<>();
+        for(List<String> val : ans.values()){
+            result.add(val);
+        }
+        return result;
+    }
+}
+
+
+/*		Check if two strings are k-anagrams or not	(GFG)	*/
+
+
+
+class GfG
+{
+      boolean areKAnagrams(String s1, String s2, int k)
+     {
+      //add code here.
+      if(s1.length() != s2.length()){
+          return false;
+      }
+      HashMap<Character,Integer> map = new HashMap<>();
+      for(int i=0;i<s1.length();i++){
+          map.put(s1.charAt(i),map.getOrDefault(s1.charAt(i),0)+1);
+      }
+      for(int i=0;i<s2.length();i++){
+          if(map.getOrDefault(s2.charAt(i),0) > 0){
+              map.put(s2.charAt(i),map.get(s2.charAt(i))-1);
+          }
+      }
+      int count =0;
+      for(char ch : map.keySet()){
+          count += map.get(ch);
+      }
+      if(count > k){
+          return false;
+      }
+      return true;
+     }
+}
+
+
+
+
+
+
+
 
 
 
