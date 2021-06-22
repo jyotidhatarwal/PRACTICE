@@ -178,6 +178,86 @@ class Solution {
     }
 }
 
+
+
+/*		            Subarrays with equal 1s and 0s	(GFG)		*/
+
+
+
+class Solution
+{
+    //Function to count subarrays with 1s and 0s.
+    static int countSubarrWithEqualZeroAndOne(int arr[], int n)
+    {
+        // add your code here
+        int ans =0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int sum =0;
+        map.put(sum,1);
+        for(int i=0;i<arr.length;i++){
+            if(arr[i] == 0){
+                sum += -1;
+            }else{
+                sum += 1;
+            }
+            if(map.containsKey(sum)){
+                ans += map.get(sum);
+                map.put(sum,map.get(sum)+1);
+            }else{
+               map.put(sum,1);
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+/*	Count Substrings with equal number of 0s, 1s and 2s	(GFG)		*/
+
+
+
+class Solution 
+{ 
+    long getSubstringWithEqual012(String str) 
+    { 
+        // code here
+        HashMap<String,Integer> map = new HashMap<>();
+        int count0 =0;
+        int count1 =0;
+        int count2 =0;
+        int delta10 = count1 - count0;
+        int delta21 = count2 - count1;
+        String key = delta21 +"#" + delta10;
+        map.put(key,1);
+        int ans =0;
+        for(int i=0;i<str.length();i++){
+            char ch = str.charAt(i);
+            if(ch == '0'){
+                count0++;
+            }else if(ch == '1'){
+                count1++;
+            }else{
+                count2++;
+            }
+
+             delta10 = count1 - count0;
+             delta21 = count2 - count1;
+              key = delta21 +"#" + delta10;
+              if(map.containsKey(key)){
+                  ans += map.get(key);
+                  map.put(key,map.get(key)+1);
+              }else{
+                  map.put(key,1);
+              }
+        }
+        return ans;
+    }
+} 
+
+
+
+
 /*    K Closest Points to Origin    (LC-973)    */
 
 class Solution {
