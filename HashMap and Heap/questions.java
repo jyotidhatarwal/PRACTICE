@@ -213,6 +213,38 @@ class Solution
 
 
 
+/*	Contiguous Array	(LC-525)	*/
+
+
+class Solution {
+    public int findMaxLength(int[] nums) {
+        int ans =0;
+                // sum, index
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int sum =0;
+        map.put(sum,-1);
+        for(int i=0;i<nums.length;i++){
+            if(nums[i] == 0){
+                sum += -1;
+            }else{
+                sum += nums[i];
+            }
+            if(map.containsKey(sum)){
+                int idx = map.get(sum);
+                int len = i - idx;
+                if(len > ans){
+                    ans = len;
+                }
+            }else{
+                map.put(sum,i);
+            }
+        }
+        return ans;
+    }
+}
+
+
+
 /*	Count Substrings with equal number of 0s, 1s and 2s	(GFG)		*/
 
 
@@ -312,6 +344,8 @@ class Solution
         
     }
 }
+
+
 
 
 /*          Minimum Number of Refueling Stops         (LC-871)    */
@@ -1143,6 +1177,192 @@ class GfG
       return true;
      }
 }
+
+
+/*		Find All Anagrams in a String	(LC-438)		*/
+
+
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        if(p.length() > s.length()){
+            return new ArrayList<>();
+        }
+        HashMap<Character,Integer> mapForP = new HashMap<>();
+        for(int i=0;i<p.length();i++){
+            mapForP.put(p.charAt(i),mapForP.getOrDefault(p.charAt(i),0)+1);
+        }
+        
+        HashMap<Character,Integer> mapForS = new HashMap<>();
+        for(int i=0;i<p.length();i++){
+            mapForS.put(s.charAt(i),mapForS.getOrDefault(s.charAt(i),0)+1);
+        }
+        
+        // for acquire and release
+        int i =0;
+        int j = p.length();
+        List<Integer> ans = new ArrayList<>();
+        
+        while(j<s.length()){
+            if(compare(mapForS,mapForP) == true){
+                ans.add(i);
+            }
+            
+            char acquire = s.charAt(j);
+            mapForS.put(acquire,mapForS.getOrDefault(acquire,0)+1);
+            
+            char release =  s.charAt(i);
+            if(mapForS.get(release) == 0){
+                mapForS.remove(release);
+            }else{
+                mapForS.put(release,mapForS.get(release)-1);
+            }
+            i++;
+            j++;   
+        }
+        if(compare(mapForS,mapForP) == true){
+            ans.add(i);
+        }
+        return ans;
+        
+    }
+    private boolean compare(HashMap<Character,Integer> mapForS,HashMap<Character,Integer> mapForP){
+        for(char keyInS : mapForS.keySet()){
+           int valForP = mapForP.getOrDefault(keyInS,0);
+            int valForS =  mapForS.get(keyInS);
+            if(valForP != valForS){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+/*		length of the longest substring without repeating characters.	(GFG)	*/
+
+
+
+class Solution{
+    int longestUniqueSubsttr(String S){
+        HashMap<Character,Integer> map = new HashMap<>();
+        int i=0;
+        int j =0;
+        int ans =0;
+        while(true){
+            boolean flag1 = false;
+            boolean flag2 = false;
+            // acquire
+            while(j < S.length()){
+                flag1 = true;
+                char ch = S.charAt(j);
+                map.put(ch,map.getOrDefault(ch,0)+1);
+                
+                if(map.get(ch) == 2){
+                    j++;
+                   break;
+                }else{
+                     int len = j-i +1;
+                    if(len > ans){
+                        ans = len;
+                    }
+                   
+                }
+                j++;
+            }
+            // release
+            while(i<j){
+             flag2 = true;
+                char ch = S.charAt(i);
+                map.put(ch,map.getOrDefault(ch,0)-1);
+                
+                if(map.get(ch) == 1){
+                    i++;
+                    break;
+                }
+                i++;
+            }
+            if(flag1 == false && flag2 == false){
+                break;
+            }
+        }
+        return ans;
+    }
+}
+
+
+/*	Smallest subarray with all occurrences of a most frequent element 	(GFG)	*/
+
+
+
+class Solution{
+    class Pair{
+        int firstOccurance;
+        int lastOccurance;
+        int frequency;
+        Pair(){
+            
+        }
+        Pair(int firstoccurance,int lastOccurance,int frequency){
+            this.firstOccurance = firstoccurance;
+            this.lastOccurance = lastOccurance;
+            this.frequency = frequency;
+        }
+    }
+  
+    ArrayList<Integer> smallestSubsegment(int a[], int n)
+    {
+        // Complete the function
+        HashMap<Integer,Pair> map = new HashMap<>();
+        for(int i=0;i<a.length;i++){
+            if(map.containsKey(a[i]) == false){
+                Pair p = new Pair(i,i,1);
+                map.put(a[i],p);
+            }else{
+                Pair p = map.get(a[i]);
+                p.lastOccurance = i;
+                p.frequency = map.get(a[i]).frequency +1;
+                map.put(a[i],p);
+            }
+        }
+        int startPoint = -1;
+        int endPoint = -1;
+        int max = Integer.MIN_VALUE;
+        int length = endPoint - startPoint +1;
+        for(Pair p : map.values()){
+            if(p.frequency > max){
+                startPoint = p.firstOccurance;
+                endPoint = p.lastOccurance;
+                max = p.frequency;
+                length = endPoint - startPoint +1;
+            }else if(p.frequency == max){
+                int currLen = p.lastOccurance - p.firstOccurance +1;
+                if(currLen < length){
+                    startPoint = p.firstOccurance;
+                    endPoint = p.lastOccurance;
+                    max = p.frequency;
+                    length = endPoint - startPoint +1;
+                }else if(currLen == length){
+                      if(p.firstOccurance<startPoint){
+                          startPoint=p.firstOccurance;
+                          endPoint=p.lastOccurance;
+                      }
+                }
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(int i = startPoint;i<=endPoint;i++){
+            ans.add(a[i]);
+        }
+        return ans;
+    }
+  
+    
+}
+
+
+
+
 
 
 
