@@ -529,3 +529,311 @@ public class Solution {
     }
 }
 
+
+/*      Multiply Strings    (LC-43)     */
+
+
+class Solution {
+    public String multiply(String num1, String num2) {
+        if(num1.equals("0") || num2.equals("0")){
+            return "0";
+        }
+        int l1 = num1.length();
+        int l2 = num2.length();
+        int[] result = new int[l1 + l2];
+        int i = l2-1;
+        int powerFactor =0;
+        while(i >= 0){
+            int ival = num2.charAt(i)-'0';
+            i--;
+            int j = l1-1;
+            int k = result.length-1-powerFactor;
+            int carry =0;
+            while(j >=0 || carry != 0){
+                int jval;
+                if(j>=0){
+                    jval = num1.charAt(j)-'0';
+                }else{
+                    jval=0;
+                }
+                j--;
+                int product = ival*jval + carry + result[k];
+                result[k] = product % 10;
+                carry = product / 10;
+                k--;
+            }
+            
+            powerFactor++;
+        }
+        String ans = "";
+        boolean flag = false;
+        for(int val : result){
+            if(val == 0 && flag == false){
+                // these are leading zeros
+                continue;
+            }else{
+                // first non zero found -> now this is the part of answer
+                flag = true;
+                ans += val;
+            }
+        }
+        return ans;
+    }
+}
+
+
+/*      Partition Labels    (LC-763)        */
+
+
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        int n = S.length();
+        HashMap<Character,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(S.charAt(i),i);
+        }
+        int prev =-1;
+        int max =0;
+        List<Integer> ans = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            char ch = S.charAt(i);
+            max = Math.max(max,map.get(ch));
+            if(max == i){
+                ans.add(max - prev);
+                prev = max;
+            }
+        }
+        return ans;
+    }
+}
+
+
+/*      Valid Palindrome II (LC-680)        */
+
+
+class Solution {
+    public boolean validPalindrome(String s) {
+        int i=0;
+        int j = s.length()-1;
+        while(i < j){
+            if(s.charAt(i) == s.charAt(j)){
+                i++;
+                j--;
+            }else{
+            // either skip a character from left or from right -> because at most 1 deletion is allowed
+                return isPalindrome(s,i+1,j) || isPalindrome(s,i,j-1);
+            }
+        }
+        return true;
+    }
+    private boolean isPalindrome(String s,int i,int j){
+        while(i < j){
+            if(s.charAt(i) == s.charAt(j)){
+                i++;
+                j--;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+/*      Add Strings     (LC-415)        */
+
+
+class Solution {
+    public String addStrings(String num1, String num2) {
+        String ans ="";
+        int i = num1.length()-1;
+        int j = num2.length()-1;
+        int carry =0;
+        while(i>=0 || j>=0 || carry != 0){
+            int ival;
+            if(i>=0){
+                ival = num1.charAt(i)-'0';
+            }else{
+                ival =0;
+            }
+            i--;
+            int jval;
+            if(j>=0){
+                jval = num2.charAt(j)-'0';
+            }else{
+                jval=0;
+            }
+            j--;
+            int sum = ival + jval + carry;
+            ans = (sum % 10) + ans;
+            carry = sum / 10;
+        }
+        return ans;
+    }
+}
+
+
+/*      Minimum Domino Rotations For Equal Row  (LC-1007)       */
+
+
+class Solution {
+    public int minDominoRotations(int[] tops, int[] bottoms) {
+        int count1=0;
+        int count2=0;
+        int count3 =0;
+        int count4 =0;
+        int num1 = tops[0];
+        int num2 = bottoms[0];
+        int max =Integer.MAX_VALUE;
+        for(int i=0;i<tops.length;i++){
+            // for num1
+            // count1 -> No. of swapping required to make top array as num1
+            if(count1 != max){
+                if(tops[i] == num1){
+                    // nothing to do
+                }else if(bottoms[i] == num1){
+                    count1++;   // there is 1 swap possible
+                }else{
+                    count1 = max;
+                }
+            }
+            // count2 -> No. of swapping required to make bottom array as num1
+            if(count2 != max){
+                if(bottoms[i] == num1){
+                    // nothing to do
+                }else if(tops[i] == num1){
+                    count2++;   // there is 1 swap possible
+                }else{
+                    count2 = max;
+                }
+            }
+            // for num2
+            // count3 -> No. of swapping required to make bottom array as num2
+            if(count3 != max){
+                if(bottoms[i] == num2){
+                    // nothing to do
+                }else if(tops[i] == num2){
+                    count3++;   // there is 1 swap possible
+                }else{
+                    count3 = max;
+                }
+            }
+            // count4 -> No. of swapping required to make top array as num2
+            if(count4 != max){
+                if(tops[i] == num2){
+                    // nothing to do
+                }else if(bottoms[i] == num2){
+                    count4++;   // there is 1 swap possible
+                }else{
+                    count4 = max;
+                }
+            }
+            
+        }
+     int result = Math.min(Math.min(count1,count2),Math.min(count3,count4));
+        if(result == max){
+            return -1;
+        }
+        return result;
+    }
+}
+
+
+/*       Merge Intervals    (LC-56)     */
+
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals,(a,b)->{
+           return a[0] -b[0]; 
+        });
+        
+        List<int[]> list = new ArrayList<>();
+        for(int[] interval : intervals){
+            if(list.size() == 0){
+                list.add(interval);
+            }else{
+                int[] prevInterval = list.get(list.size()-1);
+                // if starting point of current interval is smaller than the ending point of prevInterval 
+                //then there is overlapping of update the endpoint of previous interval with maximum end point of current interval and previous interval
+                if(interval[0] <= prevInterval[1]){
+                    prevInterval[1] = Math.max(interval[1],prevInterval[1]);
+                }else{
+                    list.add(interval);
+                }
+            }
+        }
+        // converting list to 2 d array
+        return list.toArray(new int[list.size()][]);
+    }
+}
+
+
+/*       Insert Interval    (LC-57)     */
+
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> list = new ArrayList<>();
+        int idx =0;
+        for(int[] interval : intervals){
+            // if the starting point of interval is smaller than the starting point of new Interval then add that interval to the arrayList
+            if(interval[0] < newInterval[0]){
+                list.add(interval);
+            }else{
+                break;
+            }
+        }
+        
+        // if the starting point of new interval is greater than the end point of the previous interval that is present in the list then add the new interval to list
+        if(list.size() == 0 || newInterval[0] > list.get(list.size()-1)[1]){
+            list.add(newInterval);
+        }else{
+            int[] prevInterval = list.get(list.size()-1);
+            prevInterval[1] = Math.max(prevInterval[1],newInterval[1]);
+        }
+        while(idx < intervals.length){
+            int[] prevInterval = list.get(list.size()-1);
+            if(prevInterval[1] >= intervals[idx][0]){
+                // merging will take place
+                prevInterval[1] = Math.max(prevInterval[1],intervals[idx][1]);
+            }else{
+                list.add(intervals[idx]);
+            }
+            idx++;
+        }
+        // converting list to 2 D array
+        return list.toArray(new int[list.size()][]);
+    }
+}
+
+
+/*      Interval List Intersections (LC-986)        */
+
+
+class Solution {
+    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+        List<int[]> list = new ArrayList<>();
+        int ptr1 =0;
+        int ptr2 =0;
+        while(ptr1 < firstList.length && ptr2 < secondList.length){
+            int commonStartPoint = Math.max(firstList[ptr1][0],secondList[ptr2][0]);
+            int commonEndPoint = Math.min(firstList[ptr1][1],secondList[ptr2][1]);
+            
+            // valid interval
+            if(commonStartPoint <= commonEndPoint){
+                int[]interval = {commonStartPoint,commonEndPoint};
+                list.add(interval);
+            }
+            // for moving ahead 
+            // move in the list whose end point is smaller as it will not contribute in making new                      interval
+            if(firstList[ptr1][1] < secondList[ptr2][1]){
+                ptr1++;
+            }else{
+                ptr2++;
+            }
+        }
+        return list.toArray(new int[list.size()][]);
+    }
+}
+
