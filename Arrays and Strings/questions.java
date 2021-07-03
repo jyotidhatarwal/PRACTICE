@@ -837,3 +837,128 @@ class Solution {
     }
 }
 
+
+/*      MEETING ROOMS (LINTCODE 920)        */
+
+
+/**
+ * Definition of Interval:
+ * public classs Interval implements Comparable<Interval> {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this.start = start;
+ *         this.end = end;
+ *     }
+ 
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param intervals: an array of meeting time intervals
+     * @return: if a person could attend all meetings
+     */
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        // Write your code here
+        Collections.sort(intervals,(a,b) ->{
+            return a.start - b.start;
+        });
+        boolean result = true;
+        if(intervals.size() == 0){
+            return true;
+        }
+        Interval Point = intervals.get(0);
+        int endPoint = Point.end;
+        for(int idx =1;idx<intervals.size();idx++){
+            Interval interval = intervals.get(idx);
+            int startPoint = interval.start;
+            if(startPoint < endPoint){
+                result = false;
+                break;
+            }else{
+                endPoint = interval.end;
+            }
+        }
+        return result;
+    }
+}
+
+
+/*      MEETING ROOMS II    (LINTCODE 919)      */
+
+
+
+/**
+ * Definition of Interval:
+ * public classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this.start = start;
+ *         this.end = end;
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param intervals: an array of meeting time intervals
+     * @return: the minimum number of conference rooms required
+     */
+    public int minMeetingRooms(List<Interval> intervals) {
+        // Write your code here
+        Collections.sort(intervals,(a,b) -> {
+            return a.start - b.start;
+        });
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(Interval interval : intervals){
+            if(pq.size() == 0){
+                // this is the first meeting
+                pq.add(interval.end);
+            }else{
+                if(pq.peek() > interval.start){
+                    // this requires another room as the new meeting start before the other extends
+                    pq.add(interval.end);
+                }else{
+                    // the room got free we can have a meeting there now
+                    pq.remove();
+                    pq.add(interval.end);
+                }
+            }
+        }
+        return pq.size();
+    }
+}
+
+
+/*      CAR POOLING (LC--1094)      */
+
+
+class Solution {
+    public boolean carPooling(int[][] trips, int capacity) {
+        int lastDropLocation = -1;
+        for(int[] trip : trips){
+            lastDropLocation = Math.max(lastDropLocation,trip[2]);
+        }
+        int[] highway = new int[lastDropLocation+1];
+        for(int[] trip : trips){
+            // at pickup index add passenger count to highway array at pickup index
+            highway[trip[1]] += trip[0];
+            // at drop index subtract passenger count to highway array at drop index
+            highway[trip[2]] -= trip[0];
+        }
+        
+        // now calculate cumulative sum and if at any index find sum greater than the capacity of car           // return false
+        
+        boolean result = true;
+        for(int i=1;i<=lastDropLocation;i++){
+            highway[i] += highway[i-1];
+            if(highway[i] > capacity){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+}
+
+
