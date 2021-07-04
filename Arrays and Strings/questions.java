@@ -984,3 +984,117 @@ class Solution {
     }
 }
 
+
+/*  Given an array A[] and a number x, check for pair in A[] with sum as x  (GFG)       */
+
+
+//  ########################################        TWO POINTER APPROACH
+
+class Solution {
+    boolean hasArrayTwoCandidates(int arr[], int n, int x) {
+        // code here
+        boolean result = false;
+        Arrays.sort(arr);
+        int left =0;
+        int right = arr.length-1;
+        while(left < right){
+            if(arr[left] + arr[right] == x){
+                result = true;
+                break;
+            }else if(arr[left] + arr[right] > x){
+                right--;
+            }else{
+                left++;
+            }
+        }
+        return result;
+    }
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      USING HASHMAP
+
+
+class Solution {
+    boolean hasArrayTwoCandidates(int arr[], int n, int x) {
+        // code here
+        boolean result = false;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+           int temp = x-arr[i];
+           if(map.containsKey(temp)){
+               result = true;
+               break;
+           }
+           map.put(arr[i],map.getOrDefault(arr[i],0)+1);
+        }
+       return result;
+    }
+}
+
+
+/*      Find Pair Given Difference  (GFG)       */
+
+
+class Solution
+{
+    public boolean findPair(int arr[], int size, int target)
+    {
+        //code here.
+        Arrays.sort(arr);
+        int i=0;
+        int j =0;
+      while(i < arr.length && j < arr.length){
+            if(arr[j] - arr[i] == target){
+                return true;
+            }else if(arr[j] - arr[i] < target){
+                j++;
+            }else{
+                i++;
+            }
+        }
+        return false;
+  
+    }
+}
+
+
+/*      Maximum Product Subarray    (LC-152)    */
+
+
+
+class Solution {
+    public int maxProduct(int[] nums) {
+        int prefixMax = prefixProduct(nums);
+        int suffixMax = suffixProduct(nums);
+        int ans = Math.max(prefixMax,suffixMax);
+        
+        return ans;
+    }
+    
+    private int prefixProduct(int[] nums){
+        int currentMax =1;
+        int overallMax = Integer.MIN_VALUE;
+        for(int i=0;i<nums.length;i++){
+            currentMax = currentMax*nums[i];
+            overallMax = Math.max(currentMax,overallMax);
+            if(currentMax == 0){
+                currentMax =1;
+            }
+        }
+        return overallMax;
+    }
+    private int suffixProduct(int[]nums){
+        int currentMax =1;
+        int overallMax = Integer.MIN_VALUE;
+        for(int i=nums.length-1;i>=0;i--){
+            currentMax = currentMax * nums[i];
+            overallMax = Math.max(overallMax,currentMax);
+            if(currentMax == 0){
+                currentMax =1;
+            }
+        }
+        return overallMax;
+    }
+}
+
+
