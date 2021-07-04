@@ -1098,3 +1098,69 @@ class Solution {
 }
 
 
+/*      Boats to Save People    (LC-881)        */
+
+
+class Solution {
+    public int numRescueBoats(int[] people, int limit) {
+        Arrays.sort(people);
+        int left =0;
+        int right = people.length-1;
+        int boat =0;
+        while(left <= right){
+            if(people[left] + people[right] <= limit){
+                boat++;
+                left++;
+                right--;
+            }else{
+                boat++;
+                right--;
+            }
+        }
+        return boat;
+    }
+}
+
+
+/*      Maximum Average Subarray I  (LC-643)        */
+
+
+class Solution {
+    public double findMaxAverage(int[] nums, int k) {
+        // using sliding window
+        int sum =0;
+        for(int i=0;i<k;i++){
+            sum += nums[i];
+        }
+        int max = sum;
+        for(int i=k;i<nums.length;i++){
+            sum = sum + nums[i] - nums[i-k];
+            max = Math.max(sum,max);
+        }
+        double ans = (double)max/k;
+        return ans;
+    }
+}
+
+
+/*      Minimum Length of String After Deleting Similar Ends    (LC-1750)       */
+
+
+class Solution {
+    public int minimumLength(String s) {
+        int left =0;
+        int right = s.length()-1;
+        while(left < right && s.charAt(left) == s.charAt(right)){
+            char ch = s.charAt(left);
+            while(left < right && ch == s.charAt(left)){
+                left++;
+            }
+            while(left <= right && ch == s.charAt(right)){
+                right--;
+            }
+        }
+        return right - left +1;
+    }
+}
+
+
