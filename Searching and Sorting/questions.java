@@ -322,5 +322,181 @@ class Solution
 }
 
 
+/*    Search in Rotated Sorted Array    (LC - 33 )  */
+
+
+class Solution {
+    public int search(int[] nums, int target) {
+        int low = 0;
+        int hi = nums.length-1;
+        while(low <= hi){
+            int mid = low + (hi - low)/2;
+            if(nums[mid] == target){
+                return  mid;
+            }else if(nums[low] <= nums[mid]){
+                // low to mid is sorted 
+                if(target >= nums[low] && nums[mid] > target){
+                    hi = mid-1;
+                }else{
+                    low = mid+1;
+                }
+            }else if(nums[mid] <= nums[hi]){
+                // mid to high is sorted
+                if(target > nums[mid] && nums[hi] >= target){
+                    low = mid+1;
+                }else{
+                    hi = mid-1;
+                }
+            }
+        }
+        return -1;
+    }
+}
+
+
+/*    Find Minimum in Rotated Sorted Array  (LC-153)    */
+
+
+class Solution {
+    public int findMin(int[] nums) {
+        int low =0;
+        int hi = nums.length-1;
+        if(nums[low] <= nums[hi]){
+            return nums[0];
+        }
+        while(low <= hi){
+            int mid = low + (hi - low)/2;
+            if(nums[mid] > nums[mid+1]){
+                return nums[mid+1];
+            }else if(nums[mid] < nums[mid-1]){
+                return nums[mid];
+            }else if(nums[low] <= nums[mid]){
+                // low to mid is sorted so discard this part
+                low = mid+1;
+            }else if(nums[mid] <= nums[hi]){
+                // mid to high is sorted so discard this part
+                hi = mid-1;
+            }
+        }
+        return -1;
+    }
+}
+
+
+/*    Koko Eating Bananas   (LC-875 ) */
+
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int max = Integer.MIN_VALUE;
+        for(int val : piles){
+            max = Math.max(val,max);
+        }
+        if(h == piles.length){
+            return max;
+        }
+        
+        // in this we are applying binary search on the speed of eating banans
+        int low =0;
+        int hi = max;
+        int speed = Integer.MIN_VALUE;
+        while(low <= hi){
+            int potentialSpeed = low + (hi - low)/2;
+            
+            if(isPossible(piles,potentialSpeed,h) == true){
+                speed = potentialSpeed;
+                hi = potentialSpeed-1;
+            }else{
+                low = potentialSpeed+1;
+            }
+        }
+        return speed;
+    }
+    private boolean isPossible(int[]piles,int potentialSpeed,int h){
+        int time =0;
+        for(int i=0;i<piles.length;i++){
+            time += (int)Math.ceil(piles[i]*1.0/potentialSpeed);
+        }
+        if(time <= h){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+/*    Find the Smallest Divisor Given a Threshold (LC-1283)   */
+
+
+class Solution {
+    public int smallestDivisor(int[] nums, int threshold) {
+        int max = Integer.MIN_VALUE;
+        for(int val : nums){
+            max = Math.max(max,val);
+        }
+        if(threshold == nums.length){
+            return max;
+        }
+        int low =1;
+        int hi = max;
+        int minDivisor = Integer.MAX_VALUE;
+        
+        // binary search is applied on divisors
+        while(low <= hi){
+            int potentialDivisor = low + (hi - low)/2;
+            
+            if(isPossible(nums,potentialDivisor,threshold) == true){
+                minDivisor = potentialDivisor;
+                hi = potentialDivisor -1;
+            }else{
+                low = potentialDivisor +1;
+            }
+        }
+        return minDivisor;
+    }
+    private boolean isPossible(int[]nums,int potentialDivisor,int threshold){
+        int result =0;
+        for(int i=0;i<nums.length;i++){
+            result += (int)Math.ceil(nums[i]*1.0/potentialDivisor);
+        }
+        if(result <= threshold){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+/*  Find the  Rotation Count (GFG) */
+
+
+class Solution {
+    int findKRotation(int arr[], int n) {
+        // code here
+        
+        int low = 0;
+        int hi = arr.length-1;
+        if(arr[low] <= arr[hi]){
+            return 0;
+        }
+        while(low <= hi){
+            int mid = low + (hi - low)/2;
+            if(arr[mid] > arr[mid+1]){
+                return mid+1;
+            }else if(arr[mid] < arr[mid-1]){
+                return mid;
+            }else if(arr[low] <= arr[mid]){
+                // this is sorted part so discard this part
+                low = mid+1;
+            }else if(arr[mid] <= arr[hi]){
+                // this is sorted part so discard this part
+                hi = mid-1;
+            }
+        }
+        return 0;
+    }
+}
+
+
 
 
