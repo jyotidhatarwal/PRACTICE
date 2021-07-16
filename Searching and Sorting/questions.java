@@ -678,4 +678,225 @@ class Solution {
 }
 
 
+/*  Count the triplets  (GFG) */
+
+
+class Solution {
+    int countTriplet(int arr[], int n) {
+        // code here
+        Arrays.sort(arr);
+        int count =0;
+        for(int i=arr.length-1;i>=2;i--){
+            int low =0;
+            int hi = i-1;
+            while(low < hi){
+                if(arr[low] + arr[hi] == arr[i]){
+                    count++;
+                    low++;
+                    hi--;
+                }else if(arr[low] + arr[hi] < arr[i]){
+                    low++;
+                }else{
+                    hi--;
+                }
+            }
+        }
+        return count;
+    }
+}
+
+/*    Count the number of possible triangles  (GFG)   */
+
+
+class Solution
+{
+    //Function to count the number of possible triangles.
+    static int findNumberOfTriangles(int arr[], int n)
+    {
+        // code here
+        Arrays.sort(arr);
+        int count =0;
+        for(int i=arr.length-1;i>=2;i--){
+            int low =0;
+            int hi = i-1;
+            while(low < hi){
+                if(arr[low] + arr[hi] > arr[i]){
+                    count += (hi -low);
+                    hi--;
+                }else{
+                    low++;
+                }
+            }
+        }
+        return count;
+    }
+}
+
+/*    Count zeros in a sorted matrix  (GFG) */
+
+class GfG
+{
+    /*you are required to complete this method*/
+    int countZeros(int A[][], int N)
+    {
+        // Your code here
+        int count =0;
+        int i =0;
+        int j = A.length-1;
+        while(i < A.length && j >= 0){
+            if(A[i][j] != 0){
+                j--;
+            }else{
+                count = count + j+1;
+                i++;
+            }
+        }
+        return count;
+    }
+}
+
+/*    Counting elements in two arrays (GFG )  */
+
+//##################### TIME COMPLEXITY -- O(N*LOG(M)) ###########################
+
+
+class Solution
+{
+    public static ArrayList<Integer> countEleLessThanOrEqual(int arr1[], int arr2[], int m, int n)
+    {
+       // add your code here
+       // time complexity - O(N*log(M))
+       Arrays.sort(arr2);
+       ArrayList<Integer> ans = new ArrayList<>();
+       for(int i=0;i<arr1.length;i++){
+           int key = arr1[i];
+           int count = help(key,arr2);
+           ans.add(count);
+       }
+       return ans;
+    }
+    private static int help(int key,int[]arr){
+        int count =0;
+        int low =0;
+        int hi = arr.length-1;
+        while(low <= hi){
+            int mid = low + (hi - low)/2;
+            if(arr[mid] <= key){
+                count += (mid-low+1);
+                low = mid+1;
+            }else{
+                hi = mid-1;
+            }
+        }
+        return count;
+    }
+}
+
+
+
+//############!!!!!!!!!!!!!!!!!!!!!!!!!!  OPTIMISED APPROACH  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// TIME COMLEXITY -- O(N)
+
+class Solution
+{
+    public static ArrayList<Integer> countEleLessThanOrEqual(int arr1[], int arr2[], int m, int n)
+    {
+       // add your code here
+       
+       // time complexity - O(N)
+       int max1 =0;
+       int max2 =0;
+       for(int val : arr1){
+           max1 = Math.max(val,max1);
+       }
+       for(int val : arr2){
+           max2 = Math.max(val,max2);
+       }
+       int max = Math.max(max1,max2);
+       int[] freqArr = new int[100000];
+       for(int i=0;i<arr2.length;i++){
+           freqArr[arr2[i]]++;
+       }
+       int[] prefixSum = new int[100000];
+       prefixSum[0] = freqArr[0];
+       for(int i=1;i<=max;i++){
+           prefixSum[i] = prefixSum[i-1] + freqArr[i]; 
+       }
+       ArrayList<Integer> ans = new ArrayList<>();
+       for(int i=0;i<arr1.length;i++){
+           int key = arr1[i];
+           ans.add(prefixSum[key]);
+       }
+       return ans;
+    }
+}
+
+
+/*    Counts Zeros Xor Pairs    (GFG)   */
+
+
+class Complete{
+    
+   
+    // Function for finding maximum and value pair
+    public static long calculate (int arr[], int n) {
+        //Complete the function
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<arr.length;i++){
+            map.put(arr[i],map.getOrDefault(arr[i],0)+1);
+        }
+        int count =0;
+        for(int val : map.values()){
+           count += val*(val-1)/2; 
+        }
+        return (long)count;
+    }
+   
+    
+    
+}
+
+
+
+/*   Facing the sun   (GFG)   */
+
+
+class Solution {
+    int countBuildings(int h[], int n) {
+        // code here
+        int count =1;
+        int leftMax = h[0];
+        for(int i=1;i<h.length;i++){
+            int val = h[i];
+            if(leftMax < val){
+                count++;
+            }
+            leftMax = Math.max(leftMax,val);
+        }
+        return count;
+    }
+}
+
+
+/*    Distinct absolute array elements    (GFG)   */
+
+// TIME COMPLEXITY - O(N)   SPACE COMPLEXITY - O(N)
+
+class Solution {
+    int distinctCount(int[] arr, int n) {
+        // code here
+        for(int i=0;i<arr.length;i++){
+            if(arr[i] < 0){
+                arr[i] = Math.abs(arr[i]);
+            }
+        }
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<arr.length;i++){
+            map.put(arr[i],1);
+        }
+        return map.size();
+    }
+}
+
 
