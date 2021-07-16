@@ -539,3 +539,143 @@ class Solution {
     }
 }
 
+
+/*    Allocate minimum number of pages  (GFG)   */
+
+
+class Solution 
+{
+    //Function to find minimum number of pages.
+    public static int findPages(int[]a,int n,int m)
+    {
+        //Your code here
+        // binary search is applied on pages of the book
+        int max = Integer.MIN_VALUE;
+        int sum =0;
+        for(int val : a){
+            sum += val;
+            max = Math.max(max,val);
+        }
+        int low = max;
+        int hi = sum;
+        int ans =0;
+        if(m > n){
+            return -1;
+        }
+        while(low <= hi){
+            int mid = low + (hi - low)/2;
+            if(isPossible(a,mid,m)== true){
+                ans = mid;
+                hi = mid-1;
+            }else{
+                low = mid+1;
+            }
+        }
+        return ans;
+    }
+    private static boolean isPossible(int[]a,int mid,int m){
+        int student =1;
+        int sum =0;
+        for(int i=0;i<a.length;i++){
+            sum += a[i];
+            if(sum > mid){
+                student++;
+                sum = a[i];
+            }
+        }
+        if(student <= m){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+
+/*    Split Array Largest Sum (LC-410)    */
+
+
+class Solution {
+    public int splitArray(int[] nums, int m) {
+        int max = Integer.MIN_VALUE;
+        int sum =0;
+        for(int val : nums){
+            max = Math.max(max,val);
+            sum += val;
+        }
+        int low = max;
+        int hi = sum;
+        int ans =0;
+        while(low <= hi){
+            int mid = low + (hi - low)/2;
+            if(isPossible(nums,mid,m)== true){
+                ans = mid;
+                hi = mid-1;
+            }else{
+                low = mid+1;
+            }
+        }
+        return ans;
+    }
+    private boolean isPossible(int[]nums,int mid,int m){
+        int sum =0;
+        int subArray =1;
+        for(int i=0;i<nums.length;i++){
+            sum += nums[i];
+            if(sum > mid){
+                subArray++;
+                sum = nums[i];
+            }
+        }
+        if(subArray <= m){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+/*    Capacity To Ship Packages Within D Days (LC-1011) */
+
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        
+        int sum =0;
+        int max = Integer.MIN_VALUE;
+        for(int val : weights){
+            max = Math.max(max,val);
+            sum += val;
+        }
+        int low = max;
+        int hi = sum;
+        int ans =0;
+        while(low <= hi){
+            int  mid = low + (hi -low)/2;
+            if(isPossible(weights,mid,days)== true){
+                ans = mid;
+                hi = mid-1;
+            }else{
+                low = mid+1;
+            }
+        }
+        return ans;
+    }
+    private boolean isPossible(int[]weights,int mid,int days){
+        int sum=0;
+        int capacity =1;
+        for(int i=0;i <weights.length;i++){
+            sum += weights[i];
+            if(sum > mid){
+                capacity++;
+                sum = weights[i];
+            }
+        }
+        if(capacity <= days){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+
