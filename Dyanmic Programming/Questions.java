@@ -189,3 +189,131 @@ class Solution {
 
 
 
+
+
+
+
+
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~         INCLUDE EXCLUDE BASED QUESTION
+
+
+
+// Paint Fence  (LINTCODE-514)
+
+
+public class Solution {
+    /**
+     * @param n: non-negative integer, n posts
+     * @param k: non-negative integer, k colors
+     * @return: an integer, the total number of ways
+     */
+    public int numWays(int n, int k) {
+        // write your code here
+        if(n == 1){
+            return k;
+        }
+        int same = k;
+        int different = k * (k-1);
+        int total = same + different;
+        for(int i=3;i<=n;i++){
+            same = different;
+            different = total*(k-1);
+            total = same + different;
+        }
+        return total;
+    }
+}
+
+
+
+//  Paint House     (LINTCODE - 515)    
+
+
+public class Solution {
+    /**
+     * @param costs: n x 3 cost matrix
+     * @return: An integer, the minimum cost to paint all houses
+     */
+    public int minCost(int[][] costs) {
+        // write your code here
+        int n = costs.length;
+        if(n == 0){
+            return 0;
+        }
+        long[][] dp = new long[costs.length][costs[0].length];
+        dp[0][0] = costs[0][0]; // Minimum cost of painting first house with red color 
+        dp[0][1] = costs[0][1]; // blue
+        dp[0][2] = costs[0][2]; // green
+
+        for(int i=1;i<costs.length;i++){
+            dp[i][0] = costs[i][0] + Math.min(dp[i-1][1],dp[i-1][2]);
+            dp[i][1] = costs[i][1] + Math.min(dp[i-1][0],dp[i-1][2]);
+            dp[i][2] = costs[i][2] + Math.min(dp[i-1][0],dp[i-1][1]);
+        }
+        long minCost = Math.min(dp[n-1][0],Math.min(dp[n-1][1],dp[n-1][2]));
+        return (int)minCost;
+    }
+}
+
+
+
+
+
+
+
+
+//      Consecutive 1's not allowed     (GFG)
+
+
+class Solution {
+    long countStrings(int n) {
+        // code here
+        long ending0 = 1;
+        long ending1 = 1;
+        
+        for(int i=2;i<=n;i++){
+            long new0 = (ending1 + ending0) % 1000000007;
+            long new1 = ending0 % 1000000007;
+            ending0 = new0;
+            ending1 = new1;
+        }
+        return (ending0 + ending1) % 1000000007;
+    }
+}
+
+
+
+//  Minimum Path Sum        (LC-64)
+
+
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int[][] dp = new int[n][m];
+        for(int i=n-1;i>=0;i--){
+            for(int j= m-1;j>=0;j--){
+                if(i == n-1 && j == m-1){
+                    dp[i][j] = grid[i][j];
+                }else if(i == n-1){
+                    dp[i][j] = dp[i][j+1] + grid[i][j];
+                }else if(j == m-1){
+                    dp[i][j] = dp[i+1][j] + grid[i][j];
+                }else{
+                    dp[i][j] = Math.min(dp[i][j+1],dp[i+1][j]) + grid[i][j];
+                }
+            }
+        }
+        return dp[0][0];
+    }
+}
+
+
+
+
