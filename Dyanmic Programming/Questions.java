@@ -325,6 +325,9 @@ class Solution {
 
 
 
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22
+
 //  Minimum Path Sum        (LC-64)
 
 
@@ -351,5 +354,165 @@ class Solution {
 }
 
 
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+
+
+
+//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        LONGEST INCREASING SUBSEQUENCE  (LIS) BASED QUESTIONS
+
+
+//  Longest Increasing Subsequence  (LC-300)
+
+// T-O(N^2) APPROACH
+
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        dp[0] =1;
+        int ans =1;
+        for(int i=1;i<n;i++){
+            int max =0;
+            for(int j=0;j<i;j++){
+                if(nums[i] > nums[j]){
+                    if(dp[j] > max){
+                        max = dp[j];
+                    }
+                }
+            }
+            dp[i] = max +1;
+            if(dp[i] > ans){
+                ans = dp[i];
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+// T-O(NLOGN) APPROACH
+
+
+
+
+
+
+
+
+
+
+//  Maximum sum increasing subsequence  (GFG)       
+
+
+class Solution
+{
+	public int maxSumIS(int arr[], int n)  
+	{  
+	    //code here.
+	    int[]dp = new int[n];
+	    int ans = 0;
+	    for(int i=0;i<n;i++){
+	        Integer max = null;
+	        for(int j=0;j<i;j++){
+	            if(arr[i] > arr[j]){
+	                if(max == null){
+	                    max = dp[j];
+	                }else if(dp[j] > max){
+	                    max = dp[j];
+	                }
+	            }
+	        }
+	        if(max == null){
+	            dp[i] = arr[i];
+	        }else{
+	            dp[i] = max + arr[i];
+	        }
+	        if(dp[i] > ans){
+	            ans = dp[i];
+	        }
+	    }
+	    return ans;
+	}  
+}
+
+
+//  Longest Bitonic subsequence     (GFG)
+
+
+class Solution
+{
+    public int LongestBitonicSequence(int[] nums)
+    {
+        // Code here
+        int n = nums.length;
+        int[]lis = new int[n];
+        for(int i=0;i<n;i++){
+            int max =0;
+            for(int j=0;j<i;j++){
+                if(nums[i] > nums[j]){
+                    if(lis[j] > max){
+                        max = lis[j];
+                    }
+                }
+            }
+            lis[i] = max+1;
+        }
+        
+        int[]lds = new int[n];
+        for(int i = n-1;i>=0;i--){
+            int max =0;
+            for(int j= n-1;j>i;j--){
+                if(nums[i] > nums[j]){
+                    if(lds[j] > max){
+                        max = lds[j];
+                    }
+                }
+            }
+            lds[i] = max+1;
+        }
+        int ans =0;
+        for(int i=0;i<n;i++){
+            if(lis[i] + lds[i] - 1 > ans){
+                ans = lis[i] + lds[i] -1;
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+//      Russian Doll Envelopes  (LC-354)
+
+
+
+class Solution {
+    public int maxEnvelopes(int[][] envelopes) {
+        Arrays.sort(envelopes,(a,b)->{
+            return a[0]-b[0];
+        });
+        int[]dp = new int[envelopes.length];
+        int ans =0;
+        for(int i=0;i<envelopes.length;i++){
+            int max =0;
+            for(int j=0;j<i;j++){
+                if(envelopes[i][1] > envelopes[j][1] && envelopes[i][0] > envelopes[j][0]){
+                    if(dp[j] > max){
+                        max = dp[j];
+                    }
+                }
+            }
+            dp[i] = max +1;
+            if(dp[i] > ans){
+                ans = dp[i];
+            }
+        }
+        return ans;
+    }
+}
 
