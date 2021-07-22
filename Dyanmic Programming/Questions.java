@@ -298,7 +298,56 @@ public class Solution {
 }
 
 
+// Paint House II	(LINTCODE - 516)
 
+
+public class Solution {
+    /**
+     * @param costs: n x k cost matrix
+     * @return: an integer, the minimum cost to paint all houses
+     */
+    public int minCostII(int[][] costs) {
+        // write your code here
+        if(costs.length == 0){
+            return 0;
+        }
+        int[][] dp = new int[costs.length][costs[0].length];
+        int least = Integer.MAX_VALUE;
+        int secondLeast = Integer.MAX_VALUE;
+        
+        for(int j=0;j<costs[0].length;j++){
+            dp[0][j] = costs[0][j];
+            if(dp[0][j] < least){
+                secondLeast = least;
+                least = dp[0][j];
+            }else if(dp[0][j] < secondLeast){
+                secondLeast = dp[0][j];
+            }
+        }
+
+        for(int i=1;i<costs.length;i++){
+            int newLeast = Integer.MAX_VALUE;
+            int newSecondLeast = Integer.MAX_VALUE;
+            for(int j=0;j<costs[0].length;j++){
+                if(least == dp[i-1][j]){
+                    dp[i][j] = costs[i][j] + secondLeast;
+                }else{
+                    dp[i][j] = costs[i][j] + least;
+                }
+
+                if(dp[i][j] < newLeast){
+                    newSecondLeast = newLeast;
+                    newLeast = dp[i][j];
+                }else if(dp[i][j] < newSecondLeast){
+                    newSecondLeast = dp[i][j];
+                }
+            }
+            least = newLeast;
+            secondLeast = newSecondLeast;
+        }
+        return least;
+    }
+}
 
 
 
