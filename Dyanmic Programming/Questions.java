@@ -763,3 +763,64 @@ class Solution{
 
 
 
+
+//	Boolean Parenthesization	(LINTCODE-725)
+
+
+// NAIVE APPROACH T-O(N^3)
+
+
+
+public class Solution {
+    /**
+     * @param symb: the array of symbols
+     * @param oper: the array of operators
+     * @return: the number of ways
+     */
+    public int countParenth(char[] symb, char[] oper) {
+        // write your code here
+        int n = symb.length;
+        int[][]dpt = new int[n][n];	// DP TRUE
+        int[][]dpf = new int[n][n];	// DP FALSE
+        for(int gap =0 ;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap == 0){
+                    if(symb[i] == 'T'){
+                        dpt[i][j] = 1;
+                        dpf[i][j] = 0;
+                    }else{
+                        dpt[i][j] =0;
+                        dpf[i][j] =1;
+                    }
+                }else{
+                    for(int k=i;k<j;k++){
+                        int ltc = dpt[i][k];    // left true count
+                        int rtc = dpt[k+1][j];  // right true count
+                        int lfc = dpf[i][k];    // left false count
+                        int rfc = dpf[k+1][j];  // right false count
+
+                        if(oper[k] == '&'){
+                            dpt[i][j] += ltc*rtc;
+                            dpf[i][j] += ltc*rfc + lfc*rtc + lfc*rfc;
+                        }else if(oper[k] == '|'){
+                            dpt[i][j] += ltc*rtc + ltc*rfc + lfc*rtc;
+                            dpf[i][j] += lfc*rfc;
+                        }else{
+                            // operator == ^
+                            dpt[i][j] += ltc*rfc + lfc*rtc;
+                            dpf[i][j] += lfc*rfc + ltc*rtc;
+                        }
+                    }
+                }
+            }
+        }
+        return dpt[0][n-1];
+    }
+}
+
+
+
+
+
+
+
