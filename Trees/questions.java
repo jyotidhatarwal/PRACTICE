@@ -51,7 +51,37 @@ class Solution {
 
 
 
+// PREORDER TRAVERSAL	(MORRIS)
 
+
+public class Solution {
+    public ArrayList<Integer> preorderTraversal(TreeNode A) {
+        ArrayList<Integer>ans = new ArrayList<>();
+        while(A != null){
+            if(A.left == null){
+                ans.add(A.val);
+                A = A.right;
+            }else{
+                TreeNode rootp1 = A.left;
+                while(rootp1.right != null && rootp1.right != A){
+                    rootp1 = rootp1.right;
+                }
+                if(rootp1.right == null){
+                    ans.add(A.val);
+                    rootp1.right = A;
+                    A = A.left;
+                }else{
+                    rootp1.right = null;
+                    A = A.right;
+                }
+            }
+        }
+        return ans;
+  }
+	
+	
+	
+	
 
 
 
