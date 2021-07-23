@@ -587,3 +587,84 @@ class Solution {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+//	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		CUT BASED QUESTIONS	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+//	Palindrome Partitioning II	(LC-132)
+
+
+
+// NAIVE APPROACH	T-O(N^3)
+
+
+class Solution {
+    public int minCut(String s) {
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        for(int gap =0;gap<n;gap++){
+            for(int i=0,j=gap;j<dp.length;i++,j++){
+                if(gap == 0){
+                    dp[i][j] = true;
+                }else if(gap == 1){
+                    if(s.charAt(i) == s.charAt(j)){
+                        dp[i][j] = true;
+                    }else{
+                        dp[i][j] = false;
+                    }
+                }else{
+                    if(s.charAt(i) == s.charAt(j) && dp[i+1][j-1] == true){
+                        dp[i][j] = true;
+                    }else{
+                        dp[i][j] = false;
+                    }   
+                }
+            }
+        }
+        
+        int[][] DP = new int[n][n];
+        for(int gap =0;gap<n;gap++){
+            for(int i=0,j=gap;j<DP.length;i++,j++){
+                if(gap == 0){
+                    DP[i][j] = 0;
+                }else if(gap == 1){
+                    if(s.charAt(i) == s.charAt(j)){
+                        DP[i][j] =0;
+                    }else{
+                        DP[i][j] =1;
+                    }
+                }else{
+                    if(dp[i][j]){ // already palindrome
+                        DP[i][j] =0;
+                    }else{
+                        int min = Integer.MAX_VALUE;
+                        for(int k=i;k<j;k++){
+                            int left = DP[i][k];
+                            int right = DP[k+1][j];
+                            if(left + right +1 < min){
+                                min = left + right +1;
+                            }
+                        }
+                        DP[i][j] = min;
+                    }
+                }
+            }
+        }
+        return DP[0][n-1];
+    }
+}
