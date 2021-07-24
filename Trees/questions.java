@@ -82,7 +82,35 @@ public class Solution {
 	
 	
 	
-
+// LEVEL ORDER TRAVERSAL	(LC-102)
+	
+	
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if(root == null){
+            return new ArrayList<>();
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.add(root);
+        while(que.size() > 0){
+            int size = que.size();
+            List<Integer> ans = new ArrayList<>();
+            while(size-- > 0){
+                TreeNode rem = que.removeFirst();
+                ans.add(rem.val);
+                if(rem.left != null){
+                    que.add(rem.left);
+                }
+                if(rem.right != null){
+                    que.add(rem.right);
+                }
+            }
+            result.add(ans);
+        }
+        return result;
+    }
+}
 
 
 
