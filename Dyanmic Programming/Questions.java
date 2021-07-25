@@ -860,6 +860,149 @@ class Solution
 
 
 
+//	Burst Balloons	(LC-312)
+
+
+// NAIVE APPROACH GIVES TLE
+
+// NAIVE APPROACH
+
+class Solution {
+    public int maxCoins(int[] nums) {
+        int[]arr = new int[nums.length+2];
+        arr[0] =1;
+        arr[arr.length-1] = 1;
+        for(int i=0;i<nums.length;i++){
+            arr[i+1] = nums[i];
+        }
+        return burst(arr,0,arr.length-1); // arr, start point , end point (both points are exclusive)
+    }
+    private int burst(int[]arr,int left,int right){
+        if(left+1 == right){
+            return 0;
+        }
+        int ans =0;
+        for(int i=left+1;i<right;i++){
+            int tempLeft = burst(arr,left,i);
+            int tempRight = burst(arr,i,right);
+            int currAns = tempLeft + tempRight + arr[left]*arr[i]*arr[right];
+            ans = Math.max(ans,currAns);
+        }
+        return ans;
+    }
+}
+
+
+// RECURSIVE APPROACH T-O(N^3)
+
+//  DP APPROACH
+
+class Solution {
+    public int maxCoins(int[] nums) {
+        int[]arr = new int[nums.length+2];
+        arr[0] =1;
+        arr[arr.length-1] = 1;
+        for(int i=0;i<nums.length;i++){
+            arr[i+1] = nums[i];
+        }
+        return burst(arr,0,arr.length-1,new int[arr.length][arr.length]); 
+        // arr, start point , end point (both points are exclusive)
+    }
+    private int burst(int[]arr,int left,int right,int[][]dp){
+        if(left+1 == right){
+            return 0;
+        }
+        if(dp[left][right] != 0){
+            return dp[left][right];
+        }
+        int ans =0;
+        for(int i=left+1;i<right;i++){
+            int tempLeft = burst(arr,left,i,dp);
+            int tempRight = burst(arr,i,right,dp);
+            int currAns = tempLeft + tempRight + arr[left]*arr[i]*arr[right];
+            ans = Math.max(ans,currAns);
+            dp[left][right] = ans;
+        }
+        return ans;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		STRING BASED QUESTIONS 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+//	Longest Common Subsequence	(LC-1143)
+
+// T-O(N^2)	S-O(N^2)
+
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int n = text1.length();
+        int m = text2.length();
+        int[][]dp = new int[n+1][m+1];
+        for(int i=dp.length-2;i>=0;i--){
+            for(int j=dp[0].length-2;j>=0;j--){
+                char c1 = text1.charAt(i);
+                char c2 = text2.charAt(j);
+                if(c1 == c2){
+                    dp[i][j] = 1 + dp[i+1][j+1];
+                }else{
+                    dp[i][j] = Math.max(dp[i+1][j],dp[i][j+1]);
+                }
+            }
+        }
+        return dp[0][0];
+    }
+}
+
+
+
+//	 Longest Palindromic Subsequence	(LC-516)
+
+// T-O(N^2)	S-O(N^2)
+
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        int[][]dp = new int[n][n];
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;j++,i++){
+                if(gap == 0){
+                    dp[i][j] =1;
+                }else if(gap == 1){
+                    if(s.charAt(i) == s.charAt(j)){
+                        dp[i][j] = 2;
+                    }else{
+                        dp[i][j] =1;
+                    }
+                }else{
+                    if(s.charAt(i) == s.charAt(j)){
+                        dp[i][j] = 2 + dp[i+1][j-1];
+                    }else{
+                        dp[i][j] = Math.max(dp[i][j-1],dp[i+1][j]);
+                    }
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+}
 
 
 
