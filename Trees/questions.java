@@ -17,6 +17,31 @@ class Node{
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~` BINARY TREE TRAVERSALS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+// INORDER TRAVERSAL (USING STACK)	ITERATIVE
+
+
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        Stack<TreeNode> st = new Stack<>();
+        List<Integer> ans = new ArrayList<>();
+        addAllLeftMostNode(root,st);
+        while(st.size() > 0){
+            TreeNode rem = st.pop();
+            ans.add(rem.val);
+            addAllLeftMostNode(rem.right,st);
+        }
+        return ans;
+        
+    }
+    private void addAllLeftMostNode(TreeNode root,Stack<TreeNode> st){
+        while(root != null){
+            st.push(root);
+            root = root.left;
+        }
+    }
+}
+
+
 
 
 // INORDER TRAVERSAL (MORRIS)
@@ -158,6 +183,13 @@ class Solution {
     }
 }
 
+	
+	//	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		VIEW BASED QUESTIONS 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	
+	
 
 	/*		Left View of Binary Tree	(GFG)		*/
 
@@ -521,7 +553,98 @@ class Solution {
 }
 
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	DLL TO TREE AND TREE TO DLL	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	
+	
+	
+	//	 Convert Binary Search Tree to Sorted Doubly Linked List
+	
+	//T-O(N)	S-O(N)	USING STACK
+	
+public class Solution {
+    /**
+     * @param root: root of a tree
+     * @return: head node of a doubly linked list
+     */
+     private void addAllLeftMostNode(TreeNode curr,Stack<TreeNode> st){
+         while(curr != null){
+             st.push(curr);
+             curr = curr.left;
+         }
+     }
+    public TreeNode treeToDoublyList(TreeNode root) {
+        // Write your code here.
+    Stack<TreeNode> st = new Stack<>();
+    addAllLeftMostNode(root,st);
+    TreeNode dummy = new TreeNode(-1);
+    TreeNode prev = dummy;
+    while(st.size() > 0){
+        TreeNode curr = st.pop();
+        prev.right = curr;
+        curr.left = prev;
+        prev = curr;
+        addAllLeftMostNode(curr.right,st);
+    }
+    TreeNode head = dummy.right;
+    dummy.right = head.left = null;
+    head.left = prev;
+    prev.right = head;
+    return head;
 
+    }
+}
+
+
+	//	 Convert Binary Search Tree to Sorted Doubly Linked List	
+	
+	// T-O(N)	S-O(1)
+	
+	
+	public class Solution {
+    /**
+     * @param root: root of a tree
+     * @return: head node of a doubly linked list
+     */
+public TreeNode treeToDoublyList(TreeNode root) {
+     TreeNode dummy = new TreeNode(-1);
+        TreeNode prev = dummy;
+        TreeNode curr = root;
+        while(curr != null){
+            if(curr.left == null){
+                prev.right = curr;
+                curr.left = prev;
+                prev = curr;
+                curr = curr.right;
+            }else{
+                TreeNode rootp1 = curr.left;
+                while(rootp1.right != null && rootp1.right != curr){
+                    rootp1 = rootp1.right;
+                }
+                if(rootp1.right == null){
+                    rootp1.right = curr;
+                    curr = curr.left;
+                }
+                if(rootp1.right == curr){
+                    rootp1.right = null;
+                    prev.right = curr;
+                    curr.left = prev;
+                    prev = curr;
+                    curr = curr.right;
+                }
+            }
+        }
+        TreeNode head = dummy.right;
+        dummy.right = head.left = null;
+        head.left = prev;
+        prev.right = head;
+        return head;
+}
+}
+	
 
 */
 
@@ -554,6 +677,41 @@ class Solution
 }
 
 /* In-place conversion of Sorted DLL to Balanced BST */
+	//T-O(N)
+class solution{
+	private static Node getMidNode(Node root){
+        if(root == null || root.right == null){
+            return root;
+        }
+        Node slow =root;
+        Node fast = root;
+        while(fast.right != null && fast.right.right != null){
+            slow = slow.right;
+            fast = fast.right.right;
+        }
+        return slow;
+    }
+  // left : prev, right : next
+  public static Node SortedDLLToBST(Node head) {
+    if(head == null || head.right == null){
+        return head;
+    }
+    Node mid = getMidNode(head);
+    Node prev = mid.left;
+    Node forward = mid.right;
+    forward.left = mid.right = mid.left = null;
+    if(prev != null){
+        prev.right = null;
+    }
+    Node leftHead = prev != null ? head : null;
+    Node rightHead = forward;
+    Node root = mid;
+    
+    root.left = SortedDLLToBST(leftHead);
+    root.right = SortedDLLToBST(rightHead);
+    return root;
+  }
+}	
 
 /*  APPROACH T- O(NLOGN)*/
 
@@ -594,6 +752,14 @@ public ListNode build(ListNode head, int n){
     return root;
 }
 
+	
+	
+	
+	
+//	~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	
+	
 /*   Delete Node in a BST (LC - 450)   */
 
 class Solution {
@@ -682,6 +848,15 @@ class Solution{
      }  
 }
 
+	
+	//	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+	
+	
+// 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	CONSTRUCTION BASED QUESTIONS	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	
+	
+	
 
 /*      Construct tree from Inorder and LevelOrder  (GFG)        */
 
