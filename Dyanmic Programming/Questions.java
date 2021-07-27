@@ -1077,6 +1077,348 @@ class Solution {
 }
 
 
+//	Count Different Palindromic Subsequences	(LC-730)
+
+
+class Solution {
+    public int countPalindromicSubsequences(String s) {
+        int n = s.length();
+        int[][]dp = new int[n][n];
+        int[]prev = new int[n];
+        HashMap<Character,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            char ch = s.charAt(i);
+            if(map.containsKey(ch) == false){
+                prev[i] = -1;
+            }else{
+                prev[i] = map.get(ch);
+            }
+            map.put(ch,i);
+        }
+        int[]next = new int[n];
+        for(int i=n-1;i>=0;i--){
+            char ch = s.charAt(i);
+            if(map.containsKey(ch) == false){
+                next[i] = -1;
+            }else{
+                next[i] = map.get(ch);
+            }
+            map.put(ch,i);
+        }
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap == 0){
+                    dp[i][j] = 1;
+                }else if(gap == 1){
+                    dp[i][j] = 2;
+                }else{
+                    char start = s.charAt(i);
+                    char end = s.charAt(j);
+                    if(start != end){
+                        int a = dp[i][j-1]  + dp[i+1][j];
+                        int b = dp[i+1][j-1];
+                        dp[i][j]  = (int)((a-b)% 1000000007 + 1000000007) % 1000000007;
+                    }else{
+                         int Next = next[i];
+                        int Prev = prev[j];
+                        if(Next > Prev){
+                            dp[i][j] = 2*dp[i+1][j-1];
+                            dp[i][j] %= 1000000007;
+                            dp[i][j] += 2;
+                            
+                        }else if(Next == Prev){
+                            dp[i][j] = 2*dp[i+1][j-1];
+                            dp[i][j] %= 1000000007;
+                            dp[i][j] += 1;
+                        }else if(Next < Prev){
+                            long a = 2*dp[i+1][j-1];
+                            long b = dp[Next+1][Prev-1];
+                            dp[i][j] =  (int)(((a-b)% 1000000007 + 1000000007)  % 1000000007);
+                        }
+                    }
+                   
+                }
+            }
+        }
+        return dp[0][n-1] % 1000000007;
+    }
+}
+
+
+
+//	Count subsequences of type a^i, b^j, c^k	(GFG)
+
+
+class Solution
+{
+    public int fun(String s)
+    {
+        // Write your code here
+        int n = s.length();
+        int a =0;
+        int ab =0;
+        int abc =0;
+        for(int i=0;i<n;i++){
+            char ch = s.charAt(i);
+            if(ch == 'a'){
+                a = ((2*(a % 1000000007) % 1000000007) + 1) % 1000000007 ;
+            }else if(ch == 'b'){
+                ab  = ((2*(ab % 1000000007) % 1000000007)+ (a % 1000000007)) % 1000000007;
+            }else if(ch == 'c'){
+                abc = ((2*(abc % 1000000007)% 1000000007) + (ab % 1000000007) % 1000000007);
+            }
+        }
+        return abc % 1000000007;
+    }
+}
+
+
+//	Longest Common Substring	(GFG)
+
+
+class Solution{
+    int longestCommonSubstr(String S1, String S2, int n, int m){
+        // code here
+        int[][]dp = new int[n+1][m+1];
+        int max =0;
+        for(int i=1;i<dp.length;i++){
+            for(int j=1;j<dp[0].length;j++){
+                char c1 = S1.charAt(i-1);
+                char c2 = S2.charAt(j-1);
+                if(c1 != c2){
+                    dp[i][j] =0;
+                }else{
+                    dp[i][j] = dp[i-1][j-1] +1;
+                }
+                if(dp[i][j] > max){
+                    max = dp[i][j];
+                }
+            }
+        }
+        return max;
+    }
+}
+
+
+
+//	Longest Repeating Subsequence	(GFG)
+
+
+class Solution
+{
+    public int LongestRepeatingSubsequence(String str)
+    {
+        // code here
+        int n = str.length();
+        int[][]dp = new int[n+1][n+1];
+        for(int i=dp.length-1;i>=0;i--){
+            for(int j=dp[0].length-1;j>=0;j--){
+                if(i == dp.length-1 && j == dp[0].length-1){
+                    dp[i][j] =0;
+                }else if(i == dp.length-1){
+                    dp[i][j] =0;
+                }else if(j == dp[0].length-1){
+                    dp[i][j] =0;
+                }else{
+                    if(str.charAt(i) == str.charAt(j) && i != j){
+                        dp[i][j] = dp[i+1][j+1] +1;
+                    }else{
+                        dp[i][j] = Math.max(dp[i+1][j],dp[i][j+1]);
+                    }
+                }
+            }
+        }
+        return dp[0][0];
+    }
+}
+
+
+//	Longest Palindrome in a String 	(GFG)
+
+
+class Solution{
+    static String longestPalin(String S){
+        // code here
+        int n = S.length();
+        String ans ="";
+        boolean[][]dp = new boolean[n][n];
+        
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap == 0){
+                    dp[i][j] = true;
+                }else if(gap == 1){
+                    if(S.charAt(i) == S.charAt(j)){
+                        dp[i][j] = true;
+                    }else{
+                        dp[i][j] = false;
+                    }
+                }else{
+                    if(S.charAt(i) == S.charAt(j) && dp[i+1][j-1] == true){
+                        dp[i][j] = true;
+                    }else{
+                        dp[i][j] = false;
+                    }
+                }
+                if(dp[i][j] == true){
+                    String t=S.substring(i,j+1);
+                    if(t.length()>ans.length()){
+                        ans=t;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+//	Count Palindromic Subsequences	(GFG)
+
+
+class Solution
+{
+    long countPS(String str)
+    {
+        // Your code here
+        int n  = str.length();
+        long mod=1000000007;
+        long[][]dp = new long[n][n];
+        for(int gap =0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap == 0){
+                    dp[i][j] = 1;
+                }else if(gap == 1){
+                    if(str.charAt(i) == str.charAt(j)){
+                        dp[i][j] = 3;
+                    }else{
+                        dp[i][j] = 2;
+                    }
+                }else{
+                    if(str.charAt(i) == str.charAt(j)){
+                        dp[i][j] = dp[i][j-1] + dp[i+1][j];
+                        dp[i][j] %= 1000000007;
+                        dp[i][j] += 1;
+                    }else{
+                           long  a = (dp[i][j-1] + dp[i+1][j])%mod;
+                            long  b = dp[i+1][j-1];
+                            dp[i][j] = ((a - b) % mod + mod) % mod;
+                    }
+                }
+               
+            }
+        }
+        return dp[0][n-1] % 1000000007;
+    }
+}
+
+
+
+
+
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+//	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		MISCILLANIOUS	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+
+//	Wildcard Matching	(LC-44)
+
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        int n = s.length();
+        int m = p.length();
+        boolean[][]dp = new boolean[m+1][n+1];
+        for(int i=dp.length-1;i>=0;i--){
+            for(int j = dp[0].length-1;j>=0;j--){
+                if(i== dp.length-1 && j == dp[0].length-1){
+                    // last cell
+                    dp[i][j] = true;
+                }else if(i == dp.length-1){
+                    // last row
+                    dp[i][j] = false;
+                }else if(j == dp[0].length-1){
+                    // last column
+                    if(p.charAt(i) == '*'){
+                        dp[i][j] = dp[i+1][j];
+                    }else{
+                        dp[i][j] = false;
+                    }
+                }else{
+                    // rest of the array
+                    if(p.charAt(i) == '?'){
+                        dp[i][j] = dp[i+1][j+1];
+                    }else if(p.charAt(i) == '*'){
+                        dp[i][j] = dp[i][j+1] || dp[i+1][j];
+                    }else if(p.charAt(i) == s.charAt(j)){
+                        dp[i][j] = dp[i+1][j+1];
+                    }else{
+                        dp[i][j] = false;
+                    }
+                }
+            }
+        }
+        return dp[0][0];
+    }
+}
+
+
+//	Regular Expression Matching	(LC-10)
+
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        int n = s.length();
+        int m = p.length();
+        boolean[][]dp = new boolean[m+1][n+1];
+        for(int i=0;i<dp.length;i++){
+            for(int j=0;j<dp[0].length;j++){
+                if(i == 0 && j == 0){
+                    // first ceell
+                    dp[i][j] = true;
+                }else if(i == 0){
+                    // first row
+                    dp[i][j] = false;
+                }else if(j == 0){
+                    // first column
+                    char patternCharacter = p.charAt(i-1);  
+                    // as in dp ith character in pattern is mapped to i-1 position
+                    if(patternCharacter == '*'){
+                        dp[i][j] = dp[i-2][j];
+                    }else{
+                        dp[i][j] = false;
+                    }
+                }else{
+                    // rest of the array
+                    char patternCharacter = p.charAt(i-1);
+                    char stringCharacter = s.charAt(j-1);
+                    if(patternCharacter == '*'){
+                        dp[i][j] = dp[i-2][j];
+                        char patternSecondLastchar = p.charAt(i-2);
+                        if(patternSecondLastchar == '.' || patternSecondLastchar == stringCharacter){
+                            dp[i][j] = dp[i][j] || dp[i][j-1];
+                        }
+                    }else if(patternCharacter == '.'){
+                        dp[i][j] = dp[i-1][j-1];
+                    }else if(patternCharacter == stringCharacter){
+                        dp[i][j] = dp[i-1][j-1];
+                    }else{
+                        dp[i][j] = false;
+                    }
+                    
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+
+
+
+
 
 
 
