@@ -130,5 +130,91 @@ class CustomStack {
 
 
 
+/*  Remove Outermost Parentheses    (LC-1021)       */
+
+
+class Solution {
+    public String removeOuterParentheses(String s) {
+        Stack<Character> st = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            // if opening brace then first check if innermost then push to stack
+            if(ch == '('){
+                if(st.size() > 0){
+                    sb.append(ch);
+                }
+                st.push(ch);
+            }else{
+                // if closing brace then pop from stack and then check if innermost
+                st.pop();
+                if(st.size() > 0){
+                    sb.append(ch);
+                }
+            }
+        }
+        return sb.toString();
+    }
+}
+
+
+
+/*   Minimum Add to Make Parentheses Valid  (LC-921)        */
+
+
+class Solution {
+    public int minAddToMakeValid(String s) {
+        Stack<Character> st = new Stack<>();
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            if(ch == '('){
+                st.push(ch);
+            }else{
+                if(st.size() > 0 && st.peek() == '('){
+                    st.pop();
+                }else{
+                    st.push(ch);
+                }
+            }
+        }
+        return st.size();
+    }
+}
+
+
+
+/*  Minimum Remove to Make Valid Parentheses    (LC-1249)       */
+
+
+class Solution {
+    public String minRemoveToMakeValid(String s) {
+        char[] arr = s.toCharArray();
+        Stack<Integer> st = new Stack<>();
+        for(int i=0;i<arr.length;i++){
+            if(arr[i] == '('){
+                st.push(i);
+            }else if(arr[i] == ')'){
+                if(st.size() == 0){
+                    arr[i] = '.';
+                }else{
+                    st.pop();
+                }
+            }
+        }
+        while(st.size() > 0){
+            arr[st.pop()] = '.';
+        }
+        StringBuilder sb = new StringBuilder();
+        for(char ch : arr){
+            if(ch != '.'){
+                sb.append(ch);
+            }
+        }
+        return sb.toString();
+    }
+}
+
+
+
 
   
