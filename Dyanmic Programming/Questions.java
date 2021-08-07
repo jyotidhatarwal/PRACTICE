@@ -1449,6 +1449,92 @@ class Solution {
 }
 
 
+//	Largest square formed in a matrix	(GFG)
+
+
+class Solution{
+    static int maxSquare(int n, int m, int mat[][]){
+        // code here
+        int[][]dp = new int[n][m];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(i == 0 && j == 0){
+                    dp[i][j] = mat[i][j];
+                }else if(i == 0){
+                    dp[i][j] = mat[i][j];
+                }else if(j == 0){
+                    dp[i][j] = mat[i][j];
+                }else{
+                    if(mat[i][j] == 1){
+                        dp[i][j] = Math.min(dp[i-1][j],Math.min(dp[i-1][j-1],dp[i][j-1]))+1;
+                    }
+                }
+            }
+        }
+        int max =0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                max = Math.max(max,dp[i][j]);
+            }
+        }
+        return max;
+    }
+}
+
+
+// UGLY NUMBER	(LC-263)
+
+
+class Solution {
+    public boolean isUgly(int n) {
+        if(n <= 0) return false;
+        if(n == 1) return true;
+        
+        if(n % 2 == 0){
+            return isUgly(n/2);
+        }
+        if(n % 3 == 0){
+            return isUgly(n/3);
+        }
+        if(n % 5 == 0){
+            return isUgly(n/5);
+        }
+        return false;
+    }
+}
+
+
+//	UGLY NUMBER ii	(LC-264)
+
+
+class Solution {
+    public int nthUglyNumber(int n) {
+        int[]dp = new int[n+1];
+        dp[1] =1;
+        int p2 =1;
+        int p3 =1;
+        int p5 =1;
+        for(int i=2;i<=n;i++){
+            int f1 = 2*dp[p2];
+            int f2 = 3*dp[p3];
+            int f3 = 5*dp[p5];
+            int min = Math.min(f1,Math.min(f2,f3));
+            dp[i] = min;
+            if(min == f1){
+                p2++;
+            }
+            if(min == f2){
+                p3++;
+            }
+            if(min == f3){
+                p5++;
+            }
+        }
+        return dp[n];
+    }
+}
+
+
 
 
 
