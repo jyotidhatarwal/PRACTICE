@@ -562,6 +562,158 @@ class Solution
 
 
 
+	
+	
+//	Vertical sum	(GFG)
+	
+	//	ITERATIVE SOLUTION
+
+class Solution{
+    public class pair{
+        Node node = null;
+        int vl =0;
+        pair(Node node,int vl){
+            this.node = node;
+            this.vl = vl;
+        }
+    }
+    private void width(Node root,int vl,int[] minMax){
+        if(root == null) return;
+        
+        minMax[0] = Math.min(minMax[0],vl);
+        minMax[1] = Math.max(minMax[1],vl);
+        
+        width(root.left,vl-1,minMax);
+        width(root.right,vl+1,minMax);
+    }
+    public ArrayList <Integer> verticalSum(Node root) {
+        // add your code here
+        int[]minMax = new int[2];
+        width(root,0,minMax);
+        int len = minMax[1] - minMax[0] +1;
+        LinkedList<pair> que = new LinkedList<>();
+        que.addLast(new pair(root,Math.abs(minMax[0])));
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(int i=0;i<len;i++){
+            ans.add(0);
+        }
+        while(que.size() > 0){
+            int size = que.size();
+            while(size-- > 0){
+                pair rp = que.removeFirst();
+                Node node = rp.node;
+                int vl = rp.vl;
+                ans.set(vl,ans.get(vl) + node.data);
+                if(node.left != null){
+                    que.addLast(new pair(node.left,vl-1));
+                }
+                if(node.right != null){
+                    que.addLast(new pair(node.right,vl+1));
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+	
+	
+//	VERTICAL SUM	(GFG)
+	
+	// RECURSIVE SOLUTION
+	
+	
+class Solution{
+    private void width(Node root,int vl,int[]minMax){
+        if(root == null) return;
+        minMax[0] = Math.min(minMax[0],vl);
+        minMax[1] = Math.max(minMax[1],vl);
+        
+        width(root.left,vl-1,minMax);
+        width(root.right,vl+1,minMax);
+    }
+    private void dfs(Node root,int vl,ArrayList<Integer> ans){
+        if(root == null) return;
+        
+        ans.set(vl,ans.get(vl)+root.data);
+        dfs(root.left,vl-1,ans);
+        dfs(root.right,vl+1,ans);
+    }
+    public ArrayList <Integer> verticalSum(Node root) {
+        // add your code here
+        int[]minMax = new int[2];
+        width(root,0,minMax);
+        int len = minMax[1] - minMax[0] +1;
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(int i=0;i<len;i++){
+            ans.add(0);
+        }
+        
+        dfs(root,Math.abs(minMax[0]),ans);
+        return ans;
+    }
+}
+
+	
+	
+//	DIAGONAL SUM TREE	(GFG)
+	
+	//	RECURSIVE
+	
+
+class Tree {
+    private static void dfs(Node root,int diagonalNumber,ArrayList<Integer> ans){
+        if(root == null) return;
+        if(diagonalNumber == ans.size()){
+            ans.add(0);
+        }
+        ans.set(diagonalNumber,ans.get(diagonalNumber) + root.data);
+        
+        dfs(root.left,diagonalNumber+1,ans);
+        dfs(root.right,diagonalNumber,ans);
+    }
+    public static ArrayList <Integer> diagonalSum(Node root) 
+    {
+        // code here.
+        ArrayList<Integer> ans = new ArrayList<>();
+        dfs(root,0,ans);
+        return ans;
+    }
+}
+	
+	
+// DIAGONAL SUM TREE	(GFG)
+	
+	// ITERATIVE
+	
+	
+class Tree {
+    public static ArrayList <Integer> diagonalSum(Node root) 
+    {
+        // code here.
+        LinkedList<Node> que = new LinkedList<>();
+        ArrayList<Integer> ans  = new ArrayList<>();
+        que.add(root);
+        while(que.size() > 0){
+            int size = que.size();
+            int sum =0;
+            while(size-- > 0){
+                Node rem = que.removeFirst();
+                while(rem != null){
+                    sum += rem.data;
+                    if(rem.left != null){
+                        que.addLast(rem.left);
+                    }
+                    rem = rem.right;
+                }
+            }
+            ans.add(sum);
+        }
+        return ans;
+    }
+}
+	
+	
 
 /*		Binary Tree Coloring Game	(LC-1145)	*/
 
