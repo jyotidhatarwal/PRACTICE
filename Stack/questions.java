@@ -215,6 +215,95 @@ class Solution {
 }
 
 
+//  Score of Parentheses    (LC-856)
 
+
+class Solution {
+    public int scoreOfParentheses(String s) {
+        Stack<Integer> st = new Stack<>();
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            if(ch == '('){
+                st.push(-1);
+            }else{
+                if(st.peek() == -1){
+                    st.pop();
+                    st.push(1);
+                }else{
+                    int val =0;
+                    while(st.peek() != -1){
+                        val += st.pop();
+                    }
+                    st.pop();
+                    st.push(2*val);
+                }
+            }
+        }
+        int val =0;
+        while(st.size() > 0){
+            val += st.pop();
+        }
+        return val;
+    }
+}
+
+
+//   Reverse Substrings Between Each Pair of Parentheses    (LC-1190)
+
+
+class Solution {
+    public String reverseParentheses(String s) {
+        Stack<Character> st = new Stack<>();
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            if(ch == ')'){
+                Queue<Character> que = new LinkedList<>();
+                while(st.peek() != '('){
+                    que.add(st.pop());
+                }
+                st.pop();
+                while(que.size() > 0){
+                    st.push(que.remove());
+                }
+            }else{
+                st.push(ch);
+            }
+        }
+        char[] res = new char[st.size()];
+        int i = res.length-1;
+        while(i >= 0){
+            res[i] = st.pop();
+            i--;
+        }
+        return new String(res);
+    }
+}
+
+
+//  132 Pattern (LC-456)
+
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        int n = nums.length;
+        int[]min = new int[n];
+        min[0] = nums[0];
+        boolean result = false;
+        for(int i=1;i<n;i++){
+            min[i] = Math.min(min[i-1],nums[i]);
+        }
+        Stack<Integer> st = new Stack<>();
+        for(int j = n-1;j>=0;j--){
+            while(st.size() > 0 && st.peek() <= min[j]){
+                st.pop();
+            }
+            if(st.size() > 0 && st.peek() < nums[j]){
+                result = true;
+                break;
+            }
+            st.push(nums[j]);
+        }
+        return result;
+    }
+}
 
   
