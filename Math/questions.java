@@ -39,3 +39,38 @@
 
 
 
+//  Column name from a given column number  (GFG)
+
+
+class Solution
+{
+    String colName (long n)
+    {
+        // your code here
+        StringBuilder sb = new StringBuilder();
+        while(n > 0){
+            long rem = n % 26;
+            if(rem == 0){
+                sb.append("Z");
+                n = (long)Math.floor(n/26.0)-1;
+            }else{
+               // str = String.fromcharcode(rem-1+65) + str;
+               sb.append((char)((rem-1) + 'A'));
+                n = (long)Math.floor(n/26.0);
+            }
+        }
+        String str = sb.toString();
+        return reverse(str);
+    }
+    private String reverse(String s){
+        String str = "";
+        for(int i=s.length()-1;i>=0;i--){
+            str += s.charAt(i);
+        }
+        return str;
+    }
+}
+
+
+
+
